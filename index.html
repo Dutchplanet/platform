@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toolregister</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --navy:#1D3175;--navy-dark:#142256;--navy-light:#EEF1F8;
+  --magenta:#D4006A;--magenta-light:#FAE6F1;
+  --cyan:#00AEEF;--cyan-light:#E0F5FD;
+  --border:#DDE1EC;--bg:#F4F5F9;
+}
+.app{font-family:system-ui,-apple-system,sans-serif;background:#fff;min-height:100vh;}
+
+/* ── HEADER ── */
+.header{background:var(--navy);display:flex;align-items:center;gap:20px;padding:14px 24px;}
+.header-text{color:#fff;flex:1;}
+.header-title{font-size:17px;font-weight:500;}
+.header-sub{font-size:11px;color:rgba(255,255,255,.55);margin-top:2px;}
+.header-user{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.header-user-name{font-size:13px;color:rgba(255,255,255,.9);font-weight:500;}
+.rol-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.05em;}
+.rol-badge.admin{background:#D4006A;color:#fff;}
+.rol-badge.gebruiker{background:rgba(255,255,255,.18);color:rgba(255,255,255,.85);}
+.btn-header{height:28px;padding:0 12px;border:1px solid rgba(255,255,255,.3);border-radius:5px;background:transparent;color:rgba(255,255,255,.85);font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.btn-header:hover{background:rgba(255,255,255,.12);}
+.btn-header.active{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.5);}
+
+/* ── NAV ── */
+.nav{border-bottom:1px solid var(--border);background:#fff;display:flex;align-items:center;padding:0 20px;gap:4px;}
+.nb{padding:0 16px;height:42px;border:none;border-bottom:2.5px solid transparent;background:transparent;font-size:13px;color:#666;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:inherit;}
+.nb.on{color:var(--navy);font-weight:500;border-bottom-color:var(--navy);}
+.nb:hover:not(.on){color:var(--navy);background:var(--navy-light);}
+.cnt{background:var(--navy-light);color:var(--navy);font-size:10px;font-weight:500;border-radius:10px;padding:1px 6px;}
+.nb.on .cnt{background:var(--navy);color:#fff;}
+.nav-spacer{flex:1;}
+.btn-new{margin:6px 0;height:30px;padding:0 14px;background:var(--navy);color:#fff;border:none;border-radius:5px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;}
+.btn-new:hover{background:var(--navy-dark);}
+
+/* ── BODY / GRID ── */
+.body{padding:18px 20px;background:var(--bg);min-height:calc(100vh - 110px);}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:11px;}
+.view{display:none;}.view.on{display:block;}
+.loading{text-align:center;padding:40px;color:#aaa;font-size:13px;}
+
+/* ── CARDS ── */
+.card{background:#fff;border:1px solid var(--border);border-radius:7px;overflow:hidden;cursor:pointer;transition:border-color .12s;}
+.card:hover{border-color:#9AAAD0;}
+.thumb{height:105px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0;}
+.thumb img{width:100%;height:100%;object-fit:cover;}
+.cbody{padding:10px 12px 12px;}
+.ct{font-size:13px;font-weight:500;color:#111;margin-bottom:2px;line-height:1.3;}
+.cs{font-size:11px;color:#777;margin-bottom:8px;display:flex;align-items:center;gap:5px;flex-wrap:wrap;}
+.tags{display:flex;flex-wrap:wrap;gap:3px;}
+.tag{font-size:10px;padding:2px 7px;border-radius:3px;cursor:pointer;}
+.tp{background:var(--navy-light);color:var(--navy-dark);}
+.tpr{background:var(--magenta-light);color:var(--magenta);}
+.tt{background:var(--cyan-light);color:#005E80;}
+.sb{display:inline-block;font-size:10px;font-weight:500;padding:1px 7px;border-radius:3px;}
+.sa{background:#E6F4EA;color:#1B6E34;}
+.se{background:#FEF3E2;color:#8B5000;}
+.sd{background:#EEEEF0;color:#555;}
+
+.prob-card-inner{padding:12px;display:flex;gap:9px;}
+.prob-icon{width:26px;height:26px;background:var(--magenta-light);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;color:var(--magenta);font-weight:700;}
+
+/* ── VIDEO MODAL ── */
+.video-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:center;justify-content:center;}
+.video-modal-inner{position:relative;width:min(900px,92vw);}
+.video-modal-inner iframe,.video-modal-inner video{width:100%;aspect-ratio:16/9;border:none;border-radius:8px;display:block;}
+.video-modal-close{position:absolute;top:-36px;right:0;background:none;border:none;color:#fff;font-size:22px;cursor:pointer;line-height:1;}
+.video-modal-close:hover{opacity:.7;}
+
+/* ── POPUP OVERLAY ── */
+.popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;}
+.popup-overlay.hidden{display:none;}
+.popup{background:#fff;border-radius:12px;width:100%;max-width:880px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;position:relative;}
+.popup.narrow{max-width:560px;}
+.popup.medium{max-width:640px;}
+
+/* Popup header */
+.popup-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.popup-header-title{font-size:15px;font-weight:600;color:#111;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.popup-header-actions{display:flex;gap:6px;flex-shrink:0;}
+.xb{background:none;border:1px solid var(--border);cursor:pointer;color:#777;font-size:12px;height:28px;padding:0 9px;border-radius:5px;display:flex;align-items:center;gap:4px;font-family:inherit;white-space:nowrap;}
+.xb:hover{background:var(--bg);}
+.xb.primary{color:#fff;background:var(--navy);border-color:var(--navy);}
+.xb.primary:hover{background:var(--navy-dark);}
+.xb.close-btn{width:28px;padding:0;justify-content:center;font-size:14px;}
+.xb.edit-btn{color:var(--navy);border-color:var(--navy);}
+.xb.edit-btn:hover{background:var(--navy-light);}
+.xb.danger-btn{color:var(--magenta);border-color:var(--magenta);}
+.xb.danger-btn:hover{background:var(--magenta-light);}
+
+/* 2-col layout */
+.popup-2col{display:grid;grid-template-columns:1fr 1fr;flex:1;min-height:0;overflow:hidden;}
+.popup-media-col{border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.popup-hero{position:relative;overflow:hidden;background:var(--navy);flex-shrink:0;height:300px;}
+.popup-hero img{width:100%;height:100%;object-fit:cover;display:block;}
+.popup-hero.has-video{cursor:pointer;}
+.popup-hero.has-video:hover .popup-play-btn{opacity:1;}
+.popup-play-btn{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.35);opacity:0;transition:opacity .15s;pointer-events:none;}
+.popup-hero-empty{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;}
+.popup-gallery{display:flex;gap:6px;padding:10px;overflow-x:auto;flex-shrink:0;border-top:1px solid var(--border);background:#fafafa;}
+.popup-gallery::-webkit-scrollbar{height:4px;}
+.popup-gallery::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.popup-gallery-thumb{width:80px;height:60px;border-radius:5px;overflow:hidden;cursor:pointer;border:2px solid transparent;flex-shrink:0;position:relative;}
+.popup-gallery-thumb.active{border-color:var(--navy);}
+.popup-gallery-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.popup-gallery-thumb:hover{border-color:#9AAAD0;}
+
+/* Info col */
+.popup-info-col{padding:20px 22px;overflow-y:auto;display:flex;flex-direction:column;}
+.popup-title{font-size:20px;font-weight:600;color:#111;margin-bottom:6px;line-height:1.3;}
+.popup-meta{font-size:12px;color:#777;margin-bottom:14px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.btn-tool-url{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--navy);color:#fff;border-radius:6px;text-decoration:none;font-size:13px;font-weight:500;margin-bottom:16px;transition:background .12s;}
+.btn-tool-url:hover{background:var(--navy-dark);}
+
+/* Single col popup */
+.popup-body{padding:20px 22px;overflow-y:auto;flex:1;}
+.popup-body-scrollable{padding:18px 20px;overflow-y:auto;flex:1;}
+
+/* Detail sections */
+.sl{font-size:10px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;margin-top:14px;}
+.sl:first-child{margin-top:0;}
+.mr{display:flex;justify-content:space-between;font-size:11px;padding:4px 0;border-bottom:1px solid #f0f0f0;}
+.mr:last-child{border-bottom:none;}
+.mk{color:#999;}.mv{color:#222;text-align:right;}
+.divr{border:none;border-top:1px solid var(--border);margin:12px 0;}
+.desc-text{font-size:13px;color:#444;line-height:1.65;margin-bottom:12px;}
+.note-box{font-size:12px;color:#555;background:var(--bg);border-radius:5px;border-left:2.5px solid var(--navy);padding:8px 10px;margin-bottom:12px;}
+.none-label{font-size:11px;color:#aaa;font-style:italic;}
+.btn-danger-block{background:none;border:none;color:var(--magenta);font-size:12px;cursor:pointer;font-family:inherit;padding:10px 0 4px;width:100%;text-align:center;display:block;margin-top:12px;border-top:1px solid var(--border);}
+.btn-danger-block:hover{text-decoration:underline;}
+
+/* ── TIJDBALK ── */
+.tl-wrap{padding:24px 24px 32px;}
+.tl-arrow-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.tl-pct-label{font-size:11px;font-weight:500;color:#aaa;width:28px;flex-shrink:0;}
+.tl-pct-label.right{text-align:right;}
+.tl-arrow{flex:1;height:42px;position:relative;}
+.tl-arrow-body{position:absolute;inset:0;background:linear-gradient(90deg,#4AABDC,#00AEEF);clip-path:polygon(0 18%,calc(100% - 28px) 18%,calc(100% - 28px) 0,100% 50%,calc(100% - 28px) 100%,calc(100% - 28px) 82%,0 82%);}
+.tl-arrow-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:rgba(255,255,255,.9);padding-right:28px;letter-spacing:.03em;}
+.tl-tick-row{display:flex;align-items:flex-start;margin-left:38px;margin-right:0;position:relative;height:20px;margin-bottom:0;}
+.tl-tick{position:absolute;transform:translateX(-50%);font-size:10px;color:#bbb;line-height:1;}
+.tl-body{margin-left:38px;position:relative;border-left:1px solid var(--border);border-right:none;}
+.tl-gridline{position:absolute;top:0;bottom:0;width:1px;background:var(--border);opacity:.6;pointer-events:none;}
+.tl-lane{position:relative;height:40px;}
+.tl-bar{position:absolute;top:5px;height:30px;border-radius:5px;display:flex;align-items:center;overflow:hidden;cursor:pointer;transition:filter .12s,box-shadow .12s;min-width:6px;}
+.tl-bar:hover{filter:brightness(1.12);box-shadow:0 3px 10px rgba(0,0,0,.22);}
+.tl-bar-img{width:26px;height:100%;object-fit:cover;flex-shrink:0;opacity:.85;}
+.tl-bar-label{font-size:11px;font-weight:500;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 8px;text-shadow:0 1px 3px rgba(0,0,0,.35);}
+.tl-bar.narrow .tl-bar-label{display:none;}
+.tl-bar.narrow .tl-bar-img{display:none;}
+.tl-tooltip{position:fixed;background:#111;color:#fff;font-size:11px;padding:7px 10px;border-radius:5px;pointer-events:none;z-index:999;line-height:1.6;max-width:200px;opacity:0;transition:opacity .1s;}
+.tl-tooltip.show{opacity:1;}
+.tl-unplaced{margin-top:24px;padding-top:16px;border-top:1px solid var(--border);}
+.tl-unplaced-title{font-size:10px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;}
+.tl-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.tl-chip{font-size:12px;padding:5px 12px;border-radius:20px;cursor:pointer;font-family:inherit;color:#fff;border:none;font-weight:500;opacity:.9;}
+.tl-chip:hover{opacity:1;box-shadow:0 2px 6px rgba(0,0,0,.15);}
+
+/* ── FORM ── */
+.form-row{margin-bottom:11px;}
+.form-row label{display:block;font-size:10px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;}
+.inp{width:100%;padding:6px 9px;border:1px solid var(--border);border-radius:5px;font-size:12px;font-family:inherit;color:#222;background:#fff;outline:none;}
+.inp:focus{border-color:var(--navy);}
+textarea.inp{resize:vertical;min-height:65px;line-height:1.5;}
+select.inp{cursor:pointer;}
+.chk-grid{display:flex;flex-direction:column;gap:4px;max-height:120px;overflow-y:auto;border:1px solid var(--border);border-radius:5px;padding:6px 8px;}
+.chk-row{display:flex;align-items:center;gap:7px;font-size:12px;color:#333;cursor:pointer;}
+.chk-row input{cursor:pointer;accent-color:var(--navy);}
+.inp-row{display:flex;gap:8px;}
+.inp-row .form-row{flex:1;margin-bottom:0;}
+.err-msg{font-size:11px;color:var(--magenta);min-height:16px;margin-bottom:4px;}
+.tl-preview{margin-top:6px;height:12px;background:var(--bg);border-radius:3px;position:relative;overflow:hidden;}
+.tl-preview-bar{position:absolute;top:0;bottom:0;border-radius:3px;background:var(--navy);transition:left .1s,width .1s;}
+
+/* ── MEDIA BEHEER ── */
+.media-mgr{border:1px solid var(--border);border-radius:6px;overflow:hidden;}
+.media-mgr-items{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);}
+.media-mgr-item{background:#fff;position:relative;aspect-ratio:4/3;overflow:hidden;}
+.media-mgr-item img{width:100%;height:100%;object-fit:cover;}
+.media-mgr-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);opacity:0;transition:opacity .15s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;}
+.media-mgr-item:hover .media-mgr-overlay{opacity:1;}
+.mi-btn{font-size:10px;padding:3px 8px;border:none;border-radius:3px;cursor:pointer;font-family:inherit;font-weight:500;}
+.mi-cover{background:#fff;color:var(--navy);}
+.mi-cover.active{background:var(--navy);color:#fff;}
+.mi-del{background:var(--magenta);color:#fff;}
+.media-mgr-add{padding:10px;display:flex;flex-direction:column;gap:8px;background:#fafafa;border-top:1px solid var(--border);}
+.add-row{display:flex;gap:6px;}
+.add-row .inp{flex:1;margin:0;}
+.add-btn{padding:6px 10px;background:var(--navy);color:#fff;border:none;border-radius:5px;font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;}
+.add-btn:hover{background:var(--navy-dark);}
+.add-btn:disabled{opacity:.5;cursor:default;}
+.upload-btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:7px;background:#fff;border:1.5px dashed var(--border);border-radius:5px;font-size:12px;color:#777;cursor:pointer;font-family:inherit;width:100%;}
+.upload-btn:hover{border-color:var(--navy);color:var(--navy);}
+.media-status{font-size:11px;color:#aaa;text-align:center;padding:4px 0;min-height:18px;}
+.media-mgr-empty{padding:20px;text-align:center;font-size:12px;color:#aaa;background:#fff;}
+.spinner{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.play-icon-sm{position:absolute;bottom:4px;right:4px;width:20px;height:20px;background:rgba(0,0,0,.6);border-radius:3px;display:flex;align-items:center;justify-content:center;}
+.play-icon-sm svg{width:10px;height:10px;}
+
+/* ── LOGIN ── */
+.login-screen{min-height:100vh;display:flex;flex-direction:column;background:var(--bg);}
+.login-screen .header{flex-shrink:0;}
+.login-body{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px;}
+.login-box{background:#fff;border:1px solid var(--border);border-radius:12px;padding:36px 32px;width:100%;max-width:380px;box-shadow:0 4px 24px rgba(0,0,0,.08);}
+.login-title{font-size:20px;font-weight:600;color:#111;margin-bottom:6px;}
+.login-sub{font-size:13px;color:#777;margin-bottom:28px;}
+.login-form .form-row{margin-bottom:14px;}
+.login-form .inp{padding:9px 12px;font-size:14px;}
+.login-form label{font-size:11px;}
+.btn-login{width:100%;height:40px;background:var(--navy);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;margin-top:8px;}
+.btn-login:hover{background:var(--navy-dark);}
+.btn-login:disabled{opacity:.6;cursor:default;}
+.login-err{font-size:12px;color:var(--magenta);min-height:18px;margin-top:8px;text-align:center;}
+
+/* ── GEBRUIKERS ── */
+.users-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
+.user-card{background:#fff;border:1px solid var(--border);border-radius:8px;padding:16px;cursor:pointer;transition:border-color .12s;}
+.user-card:hover{border-color:#9AAAD0;}
+.user-card-name{font-size:14px;font-weight:600;color:#111;margin-bottom:4px;}
+.user-card-email{font-size:12px;color:#777;margin-bottom:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.user-card-meta{display:flex;align-items:center;gap:8px;}
+.user-inactive{font-size:10px;padding:2px 7px;background:#EEEEF0;color:#888;border-radius:3px;font-weight:500;}
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN SCHERM ── -->
+<div id="login-screen" class="login-screen" style="display:none;">
+  <div class="header">
+    <svg width="44" height="44" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+      <rect width="56" height="56" rx="6" fill="#142256"/>
+      <text x="5"  y="22" fill="white" font-size="16" font-weight="800" font-family="Arial,sans-serif">R</text>
+      <text x="20" y="22" fill="white" font-size="16" font-weight="800" font-family="Arial,sans-serif">H</text>
+      <polygon points="40,7 35,13 35,20 45,20 45,13" fill="white"/>
+      <rect x="37" y="15" width="6" height="5" fill="#142256"/>
+      <text x="4"  y="37" fill="white" font-size="16" font-weight="800" font-family="Arial,sans-serif">W</text>
+      <text x="22" y="37" fill="white" font-size="16" font-weight="800" font-family="Arial,sans-serif">+</text>
+      <text x="34" y="37" fill="white" font-size="16" font-weight="800" font-family="Arial,sans-serif">B</text>
+      <text x="5"  y="52" fill="white" font-size="16" font-weight="800" font-family="Arial,sans-serif">F</text>
+      <text x="20" y="52" fill="white" font-size="16" font-weight="800" font-family="Arial,sans-serif">L</text>
+      <rect x="35" y="41" width="16" height="12" rx="2" fill="white"/>
+      <polygon points="35,50 35,54 39,50" fill="white"/>
+    </svg>
+    <div class="header-text">
+      <div class="header-title">Toolregister</div>
+      <div class="header-sub">Overzicht van tools, projecten en problemen</div>
+    </div>
+  </div>
+  <div class="login-body">
+
+    <!-- Stap 1: e-mail + wachtwoord -->
+    <div id="login-step1" class="login-box">
+      <div class="login-title">Inloggen</div>
+      <div class="login-sub">Log in om het toolregister te bekijken en beheren.</div>
+      <div class="login-form">
+        <div class="form-row">
+          <label>E-mailadres</label>
+          <input class="inp" id="login-email" type="email" placeholder="naam@organisatie.nl" autocomplete="email">
+        </div>
+        <div class="form-row">
+          <label>Wachtwoord</label>
+          <input class="inp" id="login-ww" type="password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button class="btn-login" id="btn-inloggen" onclick="doLogin()">Inloggen</button>
+        <div class="login-err" id="login-err"></div>
+      </div>
+      <div style="margin-top:16px;text-align:center;">
+        <a href="#" onclick="showAdminLogin();return false;" style="font-size:12px;color:#bbb;text-decoration:none;" onmouseover="this.style.color='#777'" onmouseout="this.style.color='#bbb'">Admin</a>
+      </div>
+    </div>
+
+    <!-- Stap 2: admin wachtwoord -->
+    <div id="login-step2" class="login-box" style="display:none;">
+      <div class="login-title">Admin</div>
+      <div class="login-sub">Voer het beheerderswachtwoord in.</div>
+      <div class="login-form">
+        <div class="form-row">
+          <label>Wachtwoord</label>
+          <input class="inp" id="admin-ww" type="password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button class="btn-login" id="btn-admin-login" onclick="doAdminLogin()">Inloggen</button>
+        <div class="login-err" id="admin-err"></div>
+      </div>
+      <div style="margin-top:16px;text-align:center;">
+        <a href="#" onclick="showStep1();return false;" style="font-size:12px;color:#bbb;text-decoration:none;" onmouseover="this.style.color='#777'" onmouseout="this.style.color='#bbb'">← Terug</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── APP ── -->
+<div id="app-screen" class="app" style="display:none;">
+
+  <div class="header">
+    <svg width="44" height="44" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+      <rect width="56" height="56" rx="6" fill="#142256"/>
+      <text x="5"  y="22" fill="white" font-size="16" font-weight="800" font-family="Arial,sans-serif">R</text>
+      <text x="20" y="22" fill="white" font-size="16" font-weight="800" font-family="Arial,sans-serif">H</text>
+      <polygon points="40,7 35,13 35,20 45,20 45,13" fill="white"/>
+      <rect x="37" y="15" width="6" height="5" fill="#142256"/>
+      <text x="4"  y="37" fill="white" font-size="16" font-weight="800" font-family="Arial,sans-serif">W</text>
+      <text x="22" y="37" fill="white" font-size="16" font-weight="800" font-family="Arial,sans-serif">+</text>
+      <text x="34" y="37" fill="white" font-size="16" font-weight="800" font-family="Arial,sans-serif">B</text>
+      <text x="5"  y="52" fill="white" font-size="16" font-weight="800" font-family="Arial,sans-serif">F</text>
+      <text x="20" y="52" fill="white" font-size="16" font-weight="800" font-family="Arial,sans-serif">L</text>
+      <rect x="35" y="41" width="16" height="12" rx="2" fill="white"/>
+      <polygon points="35,50 35,54 39,50" fill="white"/>
+    </svg>
+    <div class="header-text">
+      <div class="header-title">Toolregister</div>
+      <div class="header-sub">Overzicht van tools, projecten en problemen</div>
+    </div>
+    <div class="header-user" id="header-user">
+      <!-- gevuld door JS -->
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="nb on" data-view="tools">Tools <span class="cnt" id="cnt-tools">–</span></button>
+    <button class="nb" data-view="projecten">Projecten <span class="cnt" id="cnt-projecten">–</span></button>
+    <button class="nb" data-view="problemen">Problemen <span class="cnt" id="cnt-problemen">–</span></button>
+    <button class="nb" data-view="tijdbalk">Tijdbalk</button>
+    <button class="nb" data-view="gebruikers" id="nb-gebruikers" style="display:none;">Gebruikers</button>
+    <div class="nav-spacer"></div>
+    <button class="btn-new" onclick="openNew()">+ Nieuw</button>
+  </div>
+
+  <div class="body">
+    <div id="v-tools"      class="view on"><div class="grid" id="g-tools"><div class="loading">Laden…</div></div></div>
+    <div id="v-projecten"  class="view">   <div class="grid" id="g-projecten"></div></div>
+    <div id="v-problemen"  class="view">   <div class="grid" id="g-problemen"></div></div>
+    <div id="v-tijdbalk"   class="view">   <div id="g-tijdbalk"></div></div>
+    <div id="v-gebruikers" class="view">   <div id="g-gebruikers"></div></div>
+  </div>
+</div>
+
+<!-- ── POPUP OVERLAY ── -->
+<div class="popup-overlay hidden" id="popup-overlay" onclick="handleOverlayClick(event)">
+  <div class="popup" id="popup-box">
+    <!-- content gevuld door JS -->
+  </div>
+</div>
+
+<!-- ── TOOLTIP & FILE INPUT ── -->
+<div class="tl-tooltip" id="tl-tooltip"></div>
+<input type="file" id="file-input" accept="image/*,video/mp4,video/quicktime,video/webm,video/x-msvideo,.mkv,.m4v" style="display:none" onchange="handleFileSelect(event)">
+
+<script>
+// ── State ─────────────────────────────────────────────────────────────────────
+const D = {tools:[], projecten:[], problemen:[], users:[]};
+let curView = 'tools';
+let currentUser = null;
+let mediaToolId = null;
+let popupHeroIndex = 0;  // welke media-item in hero
+
+// ── SVG helpers ───────────────────────────────────────────────────────────────
+const PLAY_SVG = `<svg width="44" height="44" viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="rgba(255,255,255,.92)"/><polygon points="17,13 35,22 17,31" fill="#111"/></svg>`;
+const PLAY_SM  = `<svg viewBox="0 0 10 10" fill="white"><polygon points="2,1 9,5 2,9"/></svg>`;
+
+// ── Auth ──────────────────────────────────────────────────────────────────────
+async function checkAuth() {
+  try {
+    const r = await fetch('/auth/me');
+    if (r.ok) {
+      currentUser = await r.json();
+      showApp();
+    } else {
+      showLogin();
+    }
+  } catch(e) {
+    showLogin();
+  }
+}
+
+function showLogin() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app-screen').style.display = 'none';
+  currentUser = null;
+}
+
+function showApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app-screen').style.display = 'block';
+  renderHeader();
+  if (currentUser && currentUser.rol !== 'admin') {
+    curView = 'tijdbalk';
+    document.querySelectorAll('.nb').forEach(b => b.classList.toggle('on', b.dataset.view === 'tijdbalk'));
+    document.querySelectorAll('.view').forEach(v => v.classList.toggle('on', v.id === 'v-tijdbalk'));
+  }
+  loadAll();
+}
+
+function renderHeader() {
+  if (!currentUser) return;
+  const hu = document.getElementById('header-user');
+  hu.innerHTML = `
+    <span class="header-user-name">${esc(currentUser.naam)}</span>
+    <span class="rol-badge ${currentUser.rol}">${currentUser.rol}</span>
+    ${currentUser.rol === 'admin' ? `<button class="btn-header" onclick="goView('gebruikers')">Gebruikers</button>` : ''}
+    <button class="btn-header" onclick="doLogout()">Uitloggen</button>
+  `;
+  // Admin: toon gebruikers tab
+  const nbG = document.getElementById('nb-gebruikers');
+  if (nbG) nbG.style.display = currentUser.rol === 'admin' ? '' : 'none';
+}
+
+function showAdminLogin() {
+  document.getElementById('login-step1').style.display = 'none';
+  document.getElementById('login-step2').style.display = '';
+  document.getElementById('admin-ww').value = '';
+  document.getElementById('admin-err').textContent = '';
+  document.getElementById('admin-ww').focus();
+}
+
+function showStep1() {
+  document.getElementById('login-step2').style.display = 'none';
+  document.getElementById('login-step1').style.display = '';
+}
+
+async function doAdminLogin() {
+  const ww  = document.getElementById('admin-ww').value;
+  const err = document.getElementById('admin-err');
+  const btn = document.getElementById('btn-admin-login');
+  err.textContent = '';
+  btn.disabled = true;
+  try {
+    const r = await fetch('/auth/admin-login', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({wachtwoord: ww})
+    });
+    const data = await r.json();
+    if (!r.ok) { err.textContent = data.fout || 'Ongeldig wachtwoord.'; return; }
+    currentUser = data;
+    showApp();
+  } catch(e) {
+    err.textContent = 'Verbindingsfout.';
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const ww    = document.getElementById('login-ww').value;
+  const errEl = document.getElementById('login-err');
+  const btn   = document.getElementById('btn-inloggen');
+  errEl.textContent = '';
+  if (!email || !ww) { errEl.textContent = 'Vul e-mail en wachtwoord in.'; return; }
+  btn.disabled = true; btn.textContent = 'Bezig…';
+  try {
+    const r = await fetch('/auth/login', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({email, wachtwoord: ww})
+    });
+    const data = await r.json();
+    if (r.ok) {
+      currentUser = data;
+      showApp();
+    } else {
+      errEl.textContent = data.fout || 'Inloggen mislukt.';
+    }
+  } catch(e) {
+    errEl.textContent = 'Netwerkfout.';
+  }
+  btn.disabled = false; btn.textContent = 'Inloggen';
+}
+
+async function doLogout() {
+  await fetch('/auth/logout', {method:'POST'});
+  closePopup();
+  showLogin();
+}
+
+// Enter on password field
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('login-screen')?.style.display !== 'none') {
+    if (document.getElementById('login-step2').style.display !== 'none') {
+      doAdminLogin();
+    } else {
+      doLogin();
+    }
+  }
+});
+
+// ── Laden ─────────────────────────────────────────────────────────────────────
+async function loadAll() {
+  const [t, p, pr] = await Promise.all([
+    fetch('/tools').then(r => r.json()),
+    fetch('/projecten').then(r => r.json()),
+    fetch('/problemen').then(r => r.json()),
+  ]);
+  D.tools = t; D.projecten = p; D.problemen = pr;
+  document.getElementById('cnt-tools').textContent = t.length;
+  document.getElementById('cnt-projecten').textContent = p.length;
+  document.getElementById('cnt-problemen').textContent = pr.length;
+  render();
+}
+
+async function loadUsers() {
+  if (currentUser?.rol !== 'admin') return;
+  const r = await fetch('/users');
+  if (r.ok) D.users = await r.json();
+}
+
+// ── Hulpfuncties ──────────────────────────────────────────────────────────────
+function byId(col, id) { return D[col].find(x => x.id === id); }
+function trunc(s, n) { return s && s.length > n ? s.slice(0, n) + '…' : (s || ''); }
+function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
+function fmtDate(iso) { if (!iso) return '–'; return new Date(iso).toLocaleDateString('nl-NL', {day:'numeric', month:'short', year:'numeric'}); }
+function sbadge(s) {
+  const m = {actief:'sa', lopend:'sa', evaluatie:'se', 'on hold':'sd', afgerond:'sd', opgelost:'sd'};
+  return `<span class="sb ${m[s]||'sd'}">${esc(s||'')}</span>`;
+}
+function tag(label, cls, cb) { return `<span class="tag ${cls}" onclick="event.stopPropagation();${cb}" title="${esc(label)}">${esc(label)}</span>`; }
+const COLORS = ['#1D3175','#D4006A','#5B2D8E','#00AEEF','#E88B00','#1B6E34','#C05200','#7B1A8B','#007A5E','#8B3A62'];
+function toolColor(id) { return COLORS[(id - 1) % COLORS.length]; }
+function coverOf(t) { return (t.media_items || []).find(m => m.is_cover) || null; }
+
+function canEdit(item) {
+  if (!currentUser) return false;
+  if (currentUser.rol === 'admin') return true;
+  // beheerder_id null = geen eigenaar → alleen admin
+  if (item.beheerder_id === null || item.beheerder_id === undefined) return false;
+  return item.beheerder_id === currentUser.id;
+}
+
+function thumbHtml(t) {
+  const c = coverOf(t);
+  if (c) {
+    const isVid = c.media_type === 'video';
+    return `<img src="${esc(c.url)}" alt="${esc(t.naam)}">`
+      + (isVid ? `<div class="play-icon-sm">${PLAY_SM}</div>` : '');
+  }
+  return `<div style="position:absolute;inset:0;background:${toolColor(t.id)};"></div>
+    <span style="font-size:26px;position:relative;z-index:1;">🔧</span>
+    <span style="position:absolute;bottom:5px;left:50%;transform:translateX(-50%);font-size:9px;color:rgba(255,255,255,.45);white-space:nowrap;">${esc(t.naam)}</span>`;
+}
+
+// ── Kaarten ───────────────────────────────────────────────────────────────────
+function cardTools() {
+  if (!D.tools.length) return '<div class="loading">Geen tools.</div>';
+  return D.tools.map(t => `
+    <div class="card" onclick="openPopup('tools',${t.id})">
+      <div class="thumb">${thumbHtml(t)}</div>
+      <div class="cbody">
+        <div class="ct">${esc(t.naam)}</div>
+        <div class="cs">${esc(t.eigenaar || '–')}&nbsp;·&nbsp;${sbadge(t.status)}</div>
+        <div class="tags">
+          ${(t.projecten || []).map(p => tag(trunc(p.naam, 18), 'tp', `go('projecten',${p.id})`)).join('')}
+          ${(t.problemen || []).map(p => tag(trunc(p.titel, 18), 'tpr', `go('problemen',${p.id})`)).join('')}
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function cardProjecten() {
+  if (!D.projecten.length) return '<div class="loading">Geen projecten.</div>';
+  return D.projecten.map(p => {
+    const tools = p.tools || [];
+    return `<div class="card" onclick="openPopup('projecten',${p.id})">
+      <div class="thumb" style="height:70px;">
+        <div style="position:absolute;inset:0;background:var(--navy);"></div>
+        <div style="position:absolute;left:14px;right:10px;top:50%;transform:translateY(-50%);">
+          <div style="font-size:11px;font-weight:500;color:white;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${esc(p.naam)}</div>
+        </div>
+        <div style="position:absolute;right:10px;top:8px;">${sbadge(p.status)}</div>
+      </div>
+      <div class="cbody">
+        <div class="ct">${esc(p.naam)}</div>
+        <div class="cs">${esc(p.projectleider || '–')}&nbsp;·&nbsp;${esc(p.opdrachtgever || '–')}</div>
+        <div class="tags">${tools.map(t => tag(t.naam, 'tt', `go('tools',${t.id})`)).join('')}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function cardProblemen() {
+  if (!D.problemen.length) return '<div class="loading">Geen problemen.</div>';
+  return D.problemen.map(p => {
+    const tools = p.tools || [];
+    return `<div class="card" onclick="openPopup('problemen',${p.id})">
+      <div class="prob-card-inner">
+        <div class="prob-icon">!</div>
+        <div style="min-width:0;">
+          <div class="ct" style="margin-bottom:4px;">${esc(p.titel)}</div>
+          <div class="cs" style="margin-bottom:7px;">${sbadge(p.status)}</div>
+          <div class="tags">${tools.map(t => tag(t.naam, 'tt', `go('tools',${t.id})`)).join('')}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function cardGebruikers() {
+  if (!D.users.length) return '<div class="loading">Geen gebruikers.</div>';
+  return `<div class="users-grid">${D.users.map(u => `
+    <div class="user-card" onclick="openUserPopup(${u.id})">
+      <div class="user-card-name">${esc(u.naam)}</div>
+      <div class="user-card-email">${esc(u.email)}</div>
+      <div class="user-card-meta">
+        <span class="rol-badge ${u.rol}">${u.rol}</span>
+        ${!u.actief ? '<span class="user-inactive">Inactief</span>' : ''}
+      </div>
+    </div>`).join('')}
+  </div>
+  <div style="margin-top:16px;">
+    <button class="btn-new" onclick="openNewUserPopup()">+ Nieuwe gebruiker</button>
+  </div>`;
+}
+
+// ── TIJDBALK ──────────────────────────────────────────────────────────────────
+function assignLanes(tools) {
+  const sorted = [...tools].sort((a, b) => a.tijdbalk_start - b.tijdbalk_start);
+  const lanes = [];
+  for (const t of sorted) {
+    let placed = false;
+    for (const lane of lanes) {
+      const last = lane[lane.length - 1];
+      if (last.tijdbalk_eind <= t.tijdbalk_start) { lane.push(t); placed = true; break; }
+    }
+    if (!placed) lanes.push([t]);
+  }
+  return lanes;
+}
+
+function renderTijdbalk() {
+  const withRange = D.tools.filter(t => t.tijdbalk_start && t.tijdbalk_eind);
+  const without   = D.tools.filter(t => !t.tijdbalk_start || !t.tijdbalk_eind);
+  const lanes = assignLanes(withRange);
+  const ticks = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+
+  const gridlines = ticks.map(n => `<div class="tl-gridline" style="left:${n}%"></div>`).join('');
+
+  const lanesHtml = lanes.map(lane => `
+    <div class="tl-lane">
+      ${lane.map(t => {
+        const s = t.tijdbalk_start, e = t.tijdbalk_eind;
+        const w = e - s;
+        const cover = coverOf(t);
+        const narrow = w < 8;
+        const veryNarrow = w < 3;
+        return `<div class="tl-bar ${narrow ? 'narrow' : ''}"
+          style="left:${s}%;width:${w}%;background:${toolColor(t.id)};"
+          onclick="openPopup('tools',${t.id})"
+          onmouseenter="showTooltip(event,${t.id})"
+          onmouseleave="hideTooltip()">
+          ${cover && !veryNarrow ? `<img class="tl-bar-img" src="${esc(cover.url)}" alt="">` : ''}
+          ${!veryNarrow ? `<span class="tl-bar-label">${esc(t.naam)}</span>` : ''}
+        </div>`;
+      }).join('')}
+    </div>`).join('');
+
+  const unplacedHtml = without.length ? `
+    <div class="tl-unplaced">
+      <div class="tl-unplaced-title">Niet op tijdbalk geplaatst</div>
+      <div class="tl-chips">
+        ${without.map(t => `<button class="tl-chip" style="background:${toolColor(t.id)};"
+          onclick="openPopup('tools',${t.id})">${esc(t.naam)}</button>`).join('')}
+      </div>
+    </div>` : '';
+
+  document.getElementById('g-tijdbalk').innerHTML = `
+  <div class="tl-wrap">
+    <div class="tl-arrow-row">
+      <span class="tl-pct-label">0%</span>
+      <div class="tl-arrow">
+        <div class="tl-arrow-body"></div>
+        <div class="tl-arrow-label">Tijdlijn transitie</div>
+      </div>
+      <span class="tl-pct-label right">100%</span>
+    </div>
+    <div class="tl-tick-row">
+      ${ticks.filter(n => n > 0 && n < 100).map(n => `<div class="tl-tick" style="left:calc(${n}% + 0px)">${n}%</div>`).join('')}
+    </div>
+    <div class="tl-body">
+      ${gridlines}
+      ${lanesHtml}
+    </div>
+    ${unplacedHtml}
+  </div>`;
+}
+
+function showTooltip(e, toolId) {
+  const t = byId('tools', toolId);
+  if (!t) return;
+  const el = document.getElementById('tl-tooltip');
+  el.innerHTML = `<strong>${esc(t.naam)}</strong><br>${t.tijdbalk_start}–${t.tijdbalk_eind}%`
+    + (t.eigenaar ? `<br>${esc(t.eigenaar)}` : '')
+    + `<br>${sbadge(t.status)}`;
+  el.classList.add('show');
+  moveTooltip(e);
+}
+function moveTooltip(e) {
+  const el = document.getElementById('tl-tooltip');
+  el.style.left = (e.clientX + 12) + 'px';
+  el.style.top  = (e.clientY + 12) + 'px';
+}
+function hideTooltip() { document.getElementById('tl-tooltip').classList.remove('show'); }
+document.addEventListener('mousemove', e => {
+  if (document.getElementById('tl-tooltip').classList.contains('show')) moveTooltip(e);
+});
+
+// ── POPUP systeem ─────────────────────────────────────────────────────────────
+function openPopup(col, id) {
+  const item = byId(col, id);
+  if (!item) return;
+  popupHeroIndex = 0;
+  const box = document.getElementById('popup-box');
+  if (col === 'tools') {
+    box.className = 'popup';
+    box.innerHTML = viewToolPopup(item);
+  } else if (col === 'projecten') {
+    box.className = 'popup medium';
+    box.innerHTML = viewProjectPopup(item);
+  } else if (col === 'problemen') {
+    box.className = 'popup medium';
+    box.innerHTML = viewProbleemPopup(item);
+  }
+  document.getElementById('popup-overlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePopup() {
+  document.getElementById('popup-overlay').classList.add('hidden');
+  document.body.style.overflow = '';
+  mediaToolId = null;
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('popup-overlay')) closePopup();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closePopup();
+});
+
+// ── Tool VIEW popup ───────────────────────────────────────────────────────────
+function viewToolPopup(t) {
+  const items = t.media_items || [];
+  const projs = t.projecten || [];
+  const probs = t.problemen || [];
+  const activeItem = items[popupHeroIndex] || null;
+  const range = t.tijdbalk_start
+    ? `<span style="font-size:11px;background:var(--navy-light);color:var(--navy);padding:2px 8px;border-radius:3px;font-weight:500;">${t.tijdbalk_start}–${t.tijdbalk_eind}%</span>`
+    : '';
+
+  // Hero
+  let heroHtml = '';
+  if (activeItem) {
+    const isVid = activeItem.media_type === 'video';
+    heroHtml = `<div class="popup-hero ${isVid ? 'has-video' : ''}" id="popup-hero"
+      ${isVid ? `onclick="openVideo('${esc(activeItem.video_url || activeItem.bron_url || '')}','')"` : ''}>
+      <img id="popup-hero-img" src="${esc(activeItem.url)}" alt="${esc(t.naam)}">
+      ${isVid ? `<div class="popup-play-btn">${PLAY_SVG}</div>` : ''}
+    </div>`;
+  } else {
+    heroHtml = `<div class="popup-hero" id="popup-hero">
+      <div class="popup-hero-empty" style="background:${toolColor(t.id)};">🔧</div>
+    </div>`;
+  }
+
+  // Gallery thumbs
+  const galleryHtml = items.length > 0 ? `
+    <div class="popup-gallery" id="popup-gallery">
+      ${items.map((m, i) => {
+        const isVid = m.media_type === 'video';
+        return `<div class="popup-gallery-thumb ${i === popupHeroIndex ? 'active' : ''}"
+          onclick="setHeroItem(${t.id},${i})"
+          onmouseenter="previewHeroItem(${i},'${esc(m.url || '')}')">
+          <img src="${esc(m.url)}" alt="">
+          ${isVid ? `<div class="play-icon-sm">${PLAY_SM}</div>` : ''}
+        </div>`;
+      }).join('')}
+    </div>` : '';
+
+  const toolUrlHtml = t.tool_url
+    ? `<a class="btn-tool-url" href="${esc(t.tool_url)}" target="_blank" rel="noopener">
+        🔗 Open tool
+      </a>` : '';
+
+  const beheerderInfo = t.beheerder
+    ? `<span>Beheerder: ${esc(t.beheerder.naam)}</span>`
+    : '';
+
+  const editBtn = canEdit(t)
+    ? `<button class="xb edit-btn" onclick="closePopup();editItemPopup('tools',${t.id})">✏ Bewerken</button>`
+    : '';
+
+  return `
+  <div class="popup-2col" style="flex:1;min-height:0;">
+    <div class="popup-media-col">
+      ${heroHtml}
+      ${galleryHtml}
+    </div>
+    <div class="popup-info-col">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
+        <div class="popup-title">${esc(t.naam)}</div>
+        <button class="xb close-btn" onclick="closePopup()" title="Sluiten" style="flex-shrink:0;margin-left:8px;">✕</button>
+      </div>
+      <div class="popup-meta">
+        <span>${esc(t.eigenaar || '–')}</span>
+        ${sbadge(t.status)}
+        ${range}
+        ${beheerderInfo}
+      </div>
+      ${toolUrlHtml}
+      ${t.beschrijving ? `<div class="desc-text">${esc(t.beschrijving)}</div>` : ''}
+      <div class="sl">Projecten</div>
+      <div class="tags" style="margin-bottom:10px;">${projs.map(p => tag(p.naam, 'tp', `closePopup();go('projecten',${p.id})`)).join('') || '<span class="none-label">Geen</span>'}</div>
+      <div class="sl">Oplost problemen</div>
+      <div class="tags" style="margin-bottom:10px;">${probs.map(p => tag(trunc(p.titel, 28), 'tpr', `closePopup();go('problemen',${p.id})`)).join('') || '<span class="none-label">Geen</span>'}</div>
+      <div class="divr"></div>
+      <div class="sl">Auditinfo</div>
+      <div class="mr"><span class="mk">Ingebracht door</span><span class="mv">${esc(t.ingebracht_door || '–')}</span></div>
+      <div class="mr"><span class="mk">Datum</span><span class="mv">${fmtDate(t.ingebracht_datum)}</span></div>
+      <div class="mr"><span class="mk">Gewijzigd door</span><span class="mv">${esc(t.gewijzigd_door || '–')}</span></div>
+      <div class="mr"><span class="mk">Datum</span><span class="mv">${fmtDate(t.gewijzigd_datum)}</span></div>
+      ${editBtn ? `<div style="margin-top:14px;">${editBtn}</div>` : ''}
+    </div>
+  </div>`;
+}
+
+function setHeroItem(toolId, index) {
+  const t = byId('tools', toolId);
+  if (!t) return;
+  popupHeroIndex = index;
+  const items = t.media_items || [];
+  const item = items[index];
+  if (!item) return;
+
+  const hero = document.getElementById('popup-hero');
+  const heroImg = document.getElementById('popup-hero-img');
+  const isVid = item.media_type === 'video';
+
+  if (hero) {
+    hero.className = `popup-hero ${isVid ? 'has-video' : ''}`;
+    if (isVid) {
+      hero.onclick = () => openVideo(item.video_url || item.bron_url || '', '');
+    } else {
+      hero.onclick = null;
+    }
+  }
+  if (heroImg) heroImg.src = item.url || '';
+
+  // Update play btn
+  if (hero) {
+    let playBtn = hero.querySelector('.popup-play-btn');
+    if (isVid && !playBtn) {
+      playBtn = document.createElement('div');
+      playBtn.className = 'popup-play-btn';
+      playBtn.innerHTML = PLAY_SVG;
+      hero.appendChild(playBtn);
+    } else if (!isVid && playBtn) {
+      playBtn.remove();
+    }
+  }
+
+  // Update active thumb
+  const gallery = document.getElementById('popup-gallery');
+  if (gallery) {
+    gallery.querySelectorAll('.popup-gallery-thumb').forEach((el, i) => {
+      el.classList.toggle('active', i === index);
+    });
+  }
+}
+
+function previewHeroItem(index, url) {
+  const heroImg = document.getElementById('popup-hero-img');
+  if (heroImg && url) heroImg.src = url;
+}
+
+// ── Project VIEW popup ────────────────────────────────────────────────────────
+function viewProjectPopup(p) {
+  const tools = p.tools || [];
+  const probIds = new Set(tools.flatMap(t => {
+    const f = byId('tools', t.id);
+    return f ? (f.problemen || []).map(pr => pr.id) : [];
+  }));
+  const probs = [...probIds].map(id => D.problemen.find(x => x.id === id)).filter(Boolean);
+  const editBtn = canEdit(p)
+    ? `<button class="xb edit-btn" onclick="closePopup();editItemPopup('projecten',${p.id})">✏ Bewerken</button>`
+    : '';
+  return `
+  <div class="popup-header">
+    <div class="popup-header-title">${esc(p.naam)}</div>
+    <div class="popup-header-actions">
+      ${editBtn}
+      <button class="xb close-btn" onclick="closePopup()">✕</button>
+    </div>
+  </div>
+  <div class="popup-body">
+    <div class="popup-meta" style="margin-top:2px;">${esc(p.projectleider||'–')}&nbsp;·&nbsp;${esc(p.opdrachtgever||'–')}&nbsp;·&nbsp;${sbadge(p.status)}</div>
+    ${p.opmerkingen ? `<div class="note-box">${esc(p.opmerkingen)}</div>` : ''}
+    <div class="sl">Gebruikte tools</div>
+    <div class="tags" style="margin-bottom:10px;">${tools.map(t => tag(t.naam, 'tt', `closePopup();go('tools',${t.id})`)).join('') || '<span class="none-label">Geen</span>'}</div>
+    <div class="sl">Aangepakte problemen <span style="font-weight:400;text-transform:none;letter-spacing:0;">(via tools)</span></div>
+    <div class="tags" style="margin-bottom:10px;">${probs.map(pr => tag(trunc(pr.titel, 28), 'tpr', `closePopup();go('problemen',${pr.id})`)).join('') || '<span class="none-label">Geen</span>'}</div>
+    <div class="divr"></div>
+    <div class="sl">Auditinfo</div>
+    <div class="mr"><span class="mk">Ingebracht door</span><span class="mv">${esc(p.ingebracht_door||'–')}</span></div>
+    <div class="mr"><span class="mk">Datum</span><span class="mv">${fmtDate(p.ingebracht_datum)}</span></div>
+    <div class="mr"><span class="mk">Gewijzigd door</span><span class="mv">${esc(p.gewijzigd_door||'–')}</span></div>
+    <div class="mr"><span class="mk">Datum</span><span class="mv">${fmtDate(p.gewijzigd_datum)}</span></div>
+  </div>`;
+}
+
+// ── Probleem VIEW popup ───────────────────────────────────────────────────────
+function viewProbleemPopup(p) {
+  const tools = p.tools || [];
+  const projIds = new Set(tools.flatMap(t => {
+    const f = byId('tools', t.id);
+    return f ? (f.projecten || []).map(pr => pr.id) : [];
+  }));
+  const projs = [...projIds].map(id => D.projecten.find(x => x.id === id)).filter(Boolean);
+  const editBtn = canEdit(p)
+    ? `<button class="xb edit-btn" onclick="closePopup();editItemPopup('problemen',${p.id})">✏ Bewerken</button>`
+    : '';
+  return `
+  <div class="popup-header">
+    <div class="popup-header-title">${esc(p.titel)}</div>
+    <div class="popup-header-actions">
+      ${editBtn}
+      <button class="xb close-btn" onclick="closePopup()">✕</button>
+    </div>
+  </div>
+  <div class="popup-body">
+    <div class="popup-meta" style="margin-top:2px;">${sbadge(p.status)}</div>
+    ${p.beschrijving ? `<div class="desc-text">${esc(p.beschrijving)}</div>` : ''}
+    ${p.opmerkingen ? `<div class="note-box">${esc(p.opmerkingen)}</div>` : ''}
+    <div class="sl">Opgelost door</div>
+    <div class="tags" style="margin-bottom:10px;">${tools.map(t => tag(t.naam, 'tt', `closePopup();go('tools',${t.id})`)).join('') || '<span class="none-label">Geen</span>'}</div>
+    <div class="sl">Projecten <span style="font-weight:400;text-transform:none;letter-spacing:0;">(via tools)</span></div>
+    <div class="tags" style="margin-bottom:10px;">${projs.map(pr => tag(trunc(pr.naam, 28), 'tp', `closePopup();go('projecten',${pr.id})`)).join('') || '<span class="none-label">Geen</span>'}</div>
+    <div class="divr"></div>
+    <div class="sl">Auditinfo</div>
+    <div class="mr"><span class="mk">Ingebracht door</span><span class="mv">${esc(p.ingebracht_door||'–')}</span></div>
+    <div class="mr"><span class="mk">Datum</span><span class="mv">${fmtDate(p.ingebracht_datum)}</span></div>
+    <div class="mr"><span class="mk">Gewijzigd door</span><span class="mv">${esc(p.gewijzigd_door||'–')}</span></div>
+    <div class="mr"><span class="mk">Datum</span><span class="mv">${fmtDate(p.gewijzigd_datum)}</span></div>
+  </div>`;
+}
+
+// ── EDIT popups ───────────────────────────────────────────────────────────────
+function editItemPopup(col, id) {
+  const item = byId(col, id);
+  if (!item) return;
+  mediaToolId = col === 'tools' ? id : null;
+  const box = document.getElementById('popup-box');
+  box.className = 'popup narrow';
+  if (col === 'tools') box.innerHTML = editToolPopup(item);
+  else if (col === 'projecten') box.innerHTML = editProjectPopup(item);
+  else box.innerHTML = editProbleemPopup(item);
+  document.getElementById('popup-overlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function openNew() {
+  mediaToolId = null;
+  const box = document.getElementById('popup-box');
+  box.className = 'popup narrow';
+  const view = curView === 'tijdbalk' ? 'tools' : curView;
+  if (view === 'tools') box.innerHTML = editToolPopup({});
+  else if (view === 'projecten') box.innerHTML = editProjectPopup({});
+  else if (view === 'problemen') box.innerHTML = editProbleemPopup({});
+  else if (view === 'gebruikers') { openNewUserPopup(); return; }
+  else box.innerHTML = editToolPopup({});
+  document.getElementById('popup-overlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+// ── Edit: Tool ────────────────────────────────────────────────────────────────
+function editToolPopup(t) {
+  const isNew = !t.id;
+  const projIds = (t.projecten || []).map(x => x.id);
+  const probIds = (t.problemen || []).map(x => x.id);
+  const ts = t.tijdbalk_start || '', te = t.tijdbalk_eind || '';
+  const mediaSection = isNew
+    ? `<div class="form-row"><label>Media</label><div style="font-size:11px;color:#aaa;padding:8px;background:var(--bg);border-radius:5px;">Sla eerst op om media toe te voegen.</div></div>`
+    : `<div class="form-row"><label>Media &amp; voorblad</label><div id="media-mgr-wrap">${mediaMgrHtml(t.media_items || [], t.id)}</div></div>`;
+  const deleteBtn = !isNew && canEdit(t)
+    ? `<button class="btn-danger-block" onclick="deleteItemConfirm('tools',${t.id})">Item verwijderen</button>` : '';
+  return `
+  <div class="popup-header">
+    <div class="popup-header-title">${isNew ? 'Nieuwe tool' : esc(t.naam)}</div>
+    <div class="popup-header-actions">
+      <button class="xb primary" onclick="saveTool(${t.id || 'null'})">Opslaan</button>
+      <button class="xb close-btn" onclick="closePopup()">✕</button>
+    </div>
+  </div>
+  <div class="popup-body-scrollable">
+    <div class="form-row"><label>Naam *</label><input class="inp" id="f-naam" value="${esc(t.naam||'')}"></div>
+    <div class="form-row"><label>Eigenaar / team</label><input class="inp" id="f-eigenaar" value="${esc(t.eigenaar||'')}"></div>
+    <div class="form-row"><label>Status</label><select class="inp" id="f-status">${statusOpties('tools', t.status||'actief')}</select></div>
+    <div class="form-row"><label>Beschrijving</label><textarea class="inp" id="f-beschrijving">${esc(t.beschrijving||'')}</textarea></div>
+    <div class="form-row"><label>Link naar tool (URL)</label><input class="inp" id="f-tool_url" type="url" value="${esc(t.tool_url||'')}" placeholder="https://…"></div>
+    <div class="form-row">
+      <label>Positie op tijdbalk (1–99)</label>
+      <div class="inp-row">
+        <div class="form-row"><label>Start</label><input class="inp" id="f-tl-start" type="number" min="1" max="99" value="${ts}" oninput="updateTlPreview()"></div>
+        <div class="form-row"><label>Eind</label><input class="inp" id="f-tl-eind" type="number" min="1" max="99" value="${te}" oninput="updateTlPreview()"></div>
+      </div>
+      <div class="tl-preview"><div class="tl-preview-bar" id="tl-prev-bar" style="left:${ts}%;width:${ts&&te?te-ts:0}%;background:var(--navy);"></div></div>
+    </div>
+    ${mediaSection}
+    ${isNew ? `<div class="form-row"><label>Ingebracht door</label><input class="inp" id="f-ingebracht_door" value="${esc(currentUser ? currentUser.naam : '')}"></div>` : ''}
+    <div class="form-row"><label>Projecten</label>${chklijst(D.projecten, projIds, 'naam')}</div>
+    <div class="form-row"><label>Oplost problemen</label>${chklijst(D.problemen, probIds, 'titel')}</div>
+    <div class="err-msg" id="form-err"></div>
+    ${deleteBtn}
+  </div>`;
+}
+
+// ── Edit: Project ─────────────────────────────────────────────────────────────
+function editProjectPopup(p) {
+  const isNew = !p.id;
+  const deleteBtn = !isNew && canEdit(p)
+    ? `<button class="btn-danger-block" onclick="deleteItemConfirm('projecten',${p.id})">Item verwijderen</button>` : '';
+  return `
+  <div class="popup-header">
+    <div class="popup-header-title">${isNew ? 'Nieuw project' : esc(p.naam)}</div>
+    <div class="popup-header-actions">
+      <button class="xb primary" onclick="saveProject(${p.id||'null'})">Opslaan</button>
+      <button class="xb close-btn" onclick="closePopup()">✕</button>
+    </div>
+  </div>
+  <div class="popup-body-scrollable">
+    <div class="form-row"><label>Naam *</label><input class="inp" id="f-naam" value="${esc(p.naam||'')}"></div>
+    <div class="form-row"><label>Projectleider</label><input class="inp" id="f-projectleider" value="${esc(p.projectleider||'')}"></div>
+    <div class="form-row"><label>Opdrachtgever</label><input class="inp" id="f-opdrachtgever" value="${esc(p.opdrachtgever||'')}"></div>
+    <div class="form-row"><label>Status</label><select class="inp" id="f-status">${statusOpties('projecten', p.status||'lopend')}</select></div>
+    <div class="form-row"><label>Opmerkingen</label><textarea class="inp" id="f-opmerkingen">${esc(p.opmerkingen||'')}</textarea></div>
+    ${isNew ? `<div class="form-row"><label>Ingebracht door</label><input class="inp" id="f-ingebracht_door" value="${esc(currentUser ? currentUser.naam : '')}"></div>` : ''}
+    <div class="err-msg" id="form-err"></div>
+    ${deleteBtn}
+  </div>`;
+}
+
+// ── Edit: Probleem ────────────────────────────────────────────────────────────
+function editProbleemPopup(p) {
+  const isNew = !p.id;
+  const deleteBtn = !isNew && canEdit(p)
+    ? `<button class="btn-danger-block" onclick="deleteItemConfirm('problemen',${p.id})">Item verwijderen</button>` : '';
+  return `
+  <div class="popup-header">
+    <div class="popup-header-title">${isNew ? 'Nieuw probleem' : esc(p.titel)}</div>
+    <div class="popup-header-actions">
+      <button class="xb primary" onclick="saveProbleem(${p.id||'null'})">Opslaan</button>
+      <button class="xb close-btn" onclick="closePopup()">✕</button>
+    </div>
+  </div>
+  <div class="popup-body-scrollable">
+    <div class="form-row"><label>Titel *</label><input class="inp" id="f-titel" value="${esc(p.titel||'')}"></div>
+    <div class="form-row"><label>Status</label><select class="inp" id="f-status">${statusOpties('problemen', p.status||'actief')}</select></div>
+    <div class="form-row"><label>Beschrijving</label><textarea class="inp" id="f-beschrijving">${esc(p.beschrijving||'')}</textarea></div>
+    <div class="form-row"><label>Opmerkingen</label><textarea class="inp" id="f-opmerkingen" style="min-height:50px;">${esc(p.opmerkingen||'')}</textarea></div>
+    ${isNew ? `<div class="form-row"><label>Ingebracht door</label><input class="inp" id="f-ingebracht_door" value="${esc(currentUser ? currentUser.naam : '')}"></div>` : ''}
+    <div class="err-msg" id="form-err"></div>
+    ${deleteBtn}
+  </div>`;
+}
+
+// ── Gebruikersbeheer popups ───────────────────────────────────────────────────
+function openUserPopup(id) {
+  const u = D.users.find(x => x.id === id);
+  if (!u) return;
+  const box = document.getElementById('popup-box');
+  box.className = 'popup narrow';
+  box.innerHTML = editUserPopup(u, false);
+  document.getElementById('popup-overlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function openNewUserPopup() {
+  const box = document.getElementById('popup-box');
+  box.className = 'popup narrow';
+  box.innerHTML = editUserPopup({}, true);
+  document.getElementById('popup-overlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function editUserPopup(u, isNew) {
+  const deleteBtn = !isNew && u.id !== currentUser?.id
+    ? `<button class="btn-danger-block" onclick="deleteUser(${u.id})">Gebruiker verwijderen</button>` : '';
+  return `
+  <div class="popup-header">
+    <div class="popup-header-title">${isNew ? 'Nieuwe gebruiker' : esc(u.naam)}</div>
+    <div class="popup-header-actions">
+      <button class="xb primary" onclick="saveUser(${isNew ? 'null' : u.id})">${isNew ? 'Aanmaken' : 'Opslaan'}</button>
+      <button class="xb close-btn" onclick="closePopup()">✕</button>
+    </div>
+  </div>
+  <div class="popup-body-scrollable">
+    <div class="form-row"><label>Naam *</label><input class="inp" id="u-naam" value="${esc(u.naam||'')}"></div>
+    <div class="form-row"><label>E-mailadres *</label><input class="inp" id="u-email" type="email" value="${esc(u.email||'')}"></div>
+    <div class="form-row"><label>${isNew ? 'Wachtwoord *' : 'Nieuw wachtwoord (leeg = ongewijzigd)'}</label><input class="inp" id="u-wachtwoord" type="password" placeholder="${isNew ? '' : '••••••••'}"></div>
+    <div class="form-row"><label>Rol</label>
+      <select class="inp" id="u-rol">
+        <option value="gebruiker" ${(!u.rol || u.rol==='gebruiker') ? 'selected':''}>Gebruiker</option>
+        <option value="admin" ${u.rol==='admin' ? 'selected':''}>Admin</option>
+      </select>
+    </div>
+    ${!isNew ? `<div class="form-row"><label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:13px;font-weight:normal;color:#333;cursor:pointer;">
+      <input type="checkbox" id="u-actief" ${u.actief !== false ? 'checked':''} style="cursor:pointer;accent-color:var(--navy);">
+      Account actief
+    </label></div>` : ''}
+    <div class="err-msg" id="form-err"></div>
+    ${deleteBtn}
+  </div>`;
+}
+
+async function saveUser(id) {
+  const isNew = id === null;
+  const naam = (document.getElementById('u-naam')?.value || '').trim();
+  const email = (document.getElementById('u-email')?.value || '').trim();
+  const wachtwoord = document.getElementById('u-wachtwoord')?.value || '';
+  const rol = document.getElementById('u-rol')?.value || 'gebruiker';
+  const actief = !isNew ? document.getElementById('u-actief')?.checked !== false : true;
+
+  if (!naam || !email) { formErr('Naam en e-mail zijn verplicht.'); return; }
+  if (isNew && !wachtwoord) { formErr('Wachtwoord is verplicht.'); return; }
+
+  const body = { naam, email, rol, actief };
+  if (wachtwoord) body.wachtwoord = wachtwoord;
+
+  const btn = document.querySelector('.xb.primary');
+  if (btn) btn.disabled = true;
+
+  try {
+    const res = await fetch(isNew ? '/users' : `/users/${id}`, {
+      method: isNew ? 'POST' : 'PUT',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      formErr(data.fout || 'Opslaan mislukt.');
+      if (btn) btn.disabled = false;
+      return;
+    }
+    closePopup();
+    await loadUsers();
+    render();
+  } catch(e) {
+    formErr('Netwerkfout.');
+    if (btn) btn.disabled = false;
+  }
+}
+
+async function deleteUser(id) {
+  if (!confirm('Gebruiker verwijderen?')) return;
+  const res = await fetch(`/users/${id}`, {method:'DELETE'});
+  if (res.ok) {
+    closePopup();
+    await loadUsers();
+    render();
+  } else {
+    const d = await res.json().catch(()=>({}));
+    alert(d.fout || 'Verwijderen mislukt.');
+  }
+}
+
+// ── Formulier helpers ─────────────────────────────────────────────────────────
+function val(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+function formErr(msg) { const el = document.getElementById('form-err'); if (el) el.textContent = msg; }
+
+function statusOpties(col, cur) {
+  const o = col === 'tools' ? ['actief','evaluatie','afgerond']
+          : col === 'projecten' ? ['lopend','on hold','afgerond']
+          : ['actief','evaluatie','opgelost'];
+  return o.map(v => `<option value="${v}" ${v === cur ? 'selected' : ''}>${v}</option>`).join('');
+}
+
+function chklijst(items, gekozen, labelKey) {
+  if (!items.length) return '<span class="none-label">Niets beschikbaar</span>';
+  return `<div class="chk-grid">${items.map(item =>
+    `<label class="chk-row"><input type="checkbox" value="${item.id}" ${gekozen.includes(item.id) ? 'checked' : ''}>${esc(item[labelKey] || '')}</label>`
+  ).join('')}</div>`;
+}
+
+function updateTlPreview() {
+  const s = parseInt(document.getElementById('f-tl-start')?.value) || 0;
+  const e = parseInt(document.getElementById('f-tl-eind')?.value) || 0;
+  const bar = document.getElementById('tl-prev-bar');
+  if (!bar) return;
+  if (s >= 1 && e >= 1 && e > s && s <= 99 && e <= 99) {
+    bar.style.left = s + '%'; bar.style.width = (e - s) + '%'; bar.style.background = 'var(--navy)';
+  } else {
+    bar.style.width = '0';
+  }
+}
+
+// ── Koppelingen ───────────────────────────────────────────────────────────────
+async function syncKoppelingen(toolId, oldP, newP, oldPr, newPr) {
+  const ops = [];
+  for (const id of newP) if (!oldP.includes(id)) ops.push(fetch(`/tools/${toolId}/projecten/${id}`, {method:'POST'}));
+  for (const id of oldP) if (!newP.includes(id)) ops.push(fetch(`/tools/${toolId}/projecten/${id}`, {method:'DELETE'}));
+  for (const id of newPr) if (!oldPr.includes(id)) ops.push(fetch(`/tools/${toolId}/problemen/${id}`, {method:'POST'}));
+  for (const id of oldPr) if (!newPr.includes(id)) ops.push(fetch(`/tools/${toolId}/problemen/${id}`, {method:'DELETE'}));
+  await Promise.all(ops);
+}
+
+// ── Opslaan ───────────────────────────────────────────────────────────────────
+async function saveTool(id) {
+  const naam = val('f-naam'); if (!naam) { formErr('Naam is verplicht.'); return; }
+  const isNew = id === null;
+  const ts = parseInt(val('f-tl-start')) || null;
+  const te = parseInt(val('f-tl-eind')) || null;
+  const body = {
+    naam, eigenaar: val('f-eigenaar'), status: val('f-status'),
+    beschrijving: val('f-beschrijving'), tool_url: val('f-tool_url') || null,
+    tijdbalk_start: ts, tijdbalk_eind: te,
+    ...(isNew && {ingebracht_door: val('f-ingebracht_door')})
+  };
+  const allChk = [...document.querySelectorAll('.chk-grid input[type=checkbox]')];
+  const newProjIds = allChk.filter(cb => D.projecten.some(p => p.id === parseInt(cb.value)) && cb.checked).map(cb => parseInt(cb.value));
+  const newProbIds = allChk.filter(cb => D.problemen.some(p => p.id === parseInt(cb.value)) && cb.checked).map(cb => parseInt(cb.value));
+  const saveBtns = document.querySelectorAll('.xb.primary'); saveBtns.forEach(b => b.disabled = true);
+  try {
+    const res = await fetch(isNew ? '/tools' : `/tools/${id}`, {
+      method: isNew ? 'POST' : 'PUT',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) {
+      const d = await res.json().catch(()=>({}));
+      formErr(d.fout || 'Opslaan mislukt.');
+      saveBtns.forEach(b => b.disabled = false);
+      return;
+    }
+    const saved = await res.json();
+    if (isNew) {
+      await syncKoppelingen(saved.id, [], newProjIds, [], newProbIds);
+    } else {
+      const old = byId('tools', id);
+      await syncKoppelingen(saved.id, (old.projecten||[]).map(x=>x.id), newProjIds, (old.problemen||[]).map(x=>x.id), newProbIds);
+    }
+    closePopup();
+    await loadAll();
+    if (saved.id) openPopup('tools', saved.id);
+  } catch(e) {
+    formErr('Netwerkfout.');
+    saveBtns.forEach(b => b.disabled = false);
+  }
+}
+
+async function saveProject(id) {
+  const naam = val('f-naam'); if (!naam) { formErr('Naam is verplicht.'); return; }
+  const isNew = id === null;
+  const body = {
+    naam, projectleider: val('f-projectleider'), opdrachtgever: val('f-opdrachtgever'),
+    status: val('f-status'), opmerkingen: val('f-opmerkingen'),
+    ...(isNew && {ingebracht_door: val('f-ingebracht_door')})
+  };
+  const btn = document.querySelector('.xb.primary'); if (btn) btn.disabled = true;
+  try {
+    const res = await fetch(isNew ? '/projecten' : `/projecten/${id}`, {
+      method: isNew ? 'POST' : 'PUT',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) { const d = await res.json().catch(()=>({})); formErr(d.fout || 'Opslaan mislukt.'); if (btn) btn.disabled = false; return; }
+    const saved = await res.json();
+    closePopup();
+    await loadAll();
+    if (saved.id) openPopup('projecten', saved.id);
+  } catch(e) { formErr('Netwerkfout.'); if (btn) btn.disabled = false; }
+}
+
+async function saveProbleem(id) {
+  const titel = val('f-titel'); if (!titel) { formErr('Titel is verplicht.'); return; }
+  const isNew = id === null;
+  const body = {
+    titel, status: val('f-status'), beschrijving: val('f-beschrijving'),
+    opmerkingen: val('f-opmerkingen'),
+    ...(isNew && {ingebracht_door: val('f-ingebracht_door')})
+  };
+  const btn = document.querySelector('.xb.primary'); if (btn) btn.disabled = true;
+  try {
+    const res = await fetch(isNew ? '/problemen' : `/problemen/${id}`, {
+      method: isNew ? 'POST' : 'PUT',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) { const d = await res.json().catch(()=>({})); formErr(d.fout || 'Opslaan mislukt.'); if (btn) btn.disabled = false; return; }
+    const saved = await res.json();
+    closePopup();
+    await loadAll();
+    if (saved.id) openPopup('problemen', saved.id);
+  } catch(e) { formErr('Netwerkfout.'); if (btn) btn.disabled = false; }
+}
+
+// ── Verwijderen ───────────────────────────────────────────────────────────────
+async function deleteItemConfirm(col, id) {
+  const item = byId(col, id);
+  if (!confirm(`"${item.naam || item.titel || 'dit item'}" verwijderen?`)) return;
+  const res = await fetch(`/${col}/${id}`, {method:'DELETE'});
+  if (res.ok) {
+    closePopup();
+    await loadAll();
+  } else {
+    const d = await res.json().catch(()=>({}));
+    alert(d.fout || 'Verwijderen mislukt.');
+  }
+}
+
+// ── Media manager ─────────────────────────────────────────────────────────────
+function mediaMgrHtml(items, toolId) {
+  const grid = items.length
+    ? items.map(m => {
+        const isVid = m.media_type === 'video';
+        return `<div class="media-mgr-item">
+          <img src="${esc(m.url||'')}" alt="">
+          ${isVid ? `<div class="play-icon-sm" style="pointer-events:none;">${PLAY_SM}</div>` : ''}
+          <div class="media-mgr-overlay">
+            <button class="mi-btn mi-cover ${m.is_cover?'active':''}" onclick="setCover(${toolId},${m.id})">${m.is_cover?'★ Voorblad':'☆ Voorblad'}</button>
+            ${isVid ? `<button class="mi-btn" style="background:#222;color:#fff;" onclick="openVideo('${esc(m.video_url||m.bron_url||'')}','')">▶ Afspelen</button>` : ''}
+            <button class="mi-btn mi-del" onclick="deleteMedia(${toolId},${m.id})">Verwijderen</button>
+          </div>
+        </div>`;
+      }).join('')
+    : '<div class="media-mgr-empty">Nog geen media.</div>';
+  return `<div class="media-mgr">
+    <div class="media-mgr-items">${grid}</div>
+    <div class="media-mgr-add">
+      <button class="upload-btn" onclick="document.getElementById('file-input').click()">↑ Afbeelding of video uploaden</button>
+      <div class="add-row">
+        <input class="inp" id="url-input" placeholder="https://…" type="url">
+        <button class="add-btn" id="url-btn" onclick="addUrl(${toolId})">Screenshot</button>
+      </div>
+      <div class="media-status" id="media-status"></div>
+    </div>
+  </div>`;
+}
+
+function renderMediaMgr(items) { const c = document.getElementById('media-mgr-wrap'); if (c) c.innerHTML = mediaMgrHtml(items, mediaToolId); }
+
+async function reloadMediaMgr() {
+  if (!mediaToolId) return;
+  const items = await fetch(`/tools/${mediaToolId}/media`).then(r => r.json());
+  renderMediaMgr(items);
+  const full = await fetch(`/tools/${mediaToolId}`).then(r => r.json());
+  const idx = D.tools.findIndex(t => t.id === mediaToolId);
+  if (idx !== -1) D.tools[idx] = full;
+  render();
+}
+
+function setMediaStatus(msg, color='#aaa') {
+  const el = document.getElementById('media-status');
+  if (el) { el.textContent = msg; el.style.color = color; }
+}
+
+async function setCover(tid, mid) {
+  await fetch(`/tools/${tid}/media/${mid}/cover`, {method:'PUT'});
+  await reloadMediaMgr();
+}
+
+async function deleteMedia(tid, mid) {
+  await fetch(`/tools/${tid}/media/${mid}`, {method:'DELETE'});
+  await reloadMediaMgr();
+}
+
+function handleFileSelect(evt) {
+  const f = evt.target.files[0];
+  evt.target.value = '';
+  if (!f || !mediaToolId) return;
+  uploadFile(f);
+}
+
+async function uploadFile(file) {
+  setMediaStatus('Uploaden…');
+  const fd = new FormData(); fd.append('file', file);
+  const res = await fetch(`/tools/${mediaToolId}/media/upload`, {method:'POST', body:fd});
+  if (res.ok) {
+    setMediaStatus('Geüpload.', 'green');
+    await reloadMediaMgr();
+    setTimeout(() => setMediaStatus(''), 2000);
+  } else {
+    const d = await res.json().catch(()=>({fout:'Fout'}));
+    setMediaStatus(d.fout || 'Upload mislukt.', 'var(--magenta)');
+  }
+}
+
+async function addUrl(toolId) {
+  const input = document.getElementById('url-input');
+  const url = (input?.value || '').trim();
+  if (!url) return;
+  const btn = document.getElementById('url-btn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+  setMediaStatus('Screenshot maken… (5–15 sec.)');
+  const res = await fetch(`/tools/${toolId}/media/url`, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({url})
+  });
+  btn.disabled = false; btn.textContent = 'Screenshot';
+  if (res.ok) {
+    if (input) input.value = '';
+    setMediaStatus('Opgeslagen.', 'green');
+    await reloadMediaMgr();
+    setTimeout(() => setMediaStatus(''), 2000);
+  } else {
+    const d = await res.json().catch(()=>({fout:'Fout'}));
+    setMediaStatus(d.fout || 'Mislukt.', 'var(--magenta)');
+  }
+}
+
+// ── Video modal ───────────────────────────────────────────────────────────────
+function openVideo(videoUrl, stillUrl) {
+  if (!videoUrl) return;
+  const isEmbed = videoUrl.includes('embed') || videoUrl.includes('player.vimeo');
+  const inner = isEmbed
+    ? `<iframe src="${esc(videoUrl)}" allowfullscreen allow="autoplay; fullscreen"></iframe>`
+    : `<video src="${esc(videoUrl)}" controls autoplay></video>`;
+  const modal = document.createElement('div');
+  modal.className = 'video-modal';
+  modal.innerHTML = `<div class="video-modal-inner">
+    <button class="video-modal-close" onclick="this.closest('.video-modal').remove()">✕</button>
+    ${inner}
+  </div>`;
+  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+  document.body.appendChild(modal);
+}
+
+// ── Navigatie ─────────────────────────────────────────────────────────────────
+function render() {
+  if (curView === 'tools')         document.getElementById('g-tools').innerHTML = cardTools();
+  else if (curView === 'projecten') document.getElementById('g-projecten').innerHTML = cardProjecten();
+  else if (curView === 'problemen') document.getElementById('g-problemen').innerHTML = cardProblemen();
+  else if (curView === 'tijdbalk')  renderTijdbalk();
+  else if (curView === 'gebruikers') document.getElementById('g-gebruikers').innerHTML = cardGebruikers();
+}
+
+function goView(view) {
+  curView = view;
+  document.querySelectorAll('.nb').forEach(b => b.classList.toggle('on', b.dataset.view === view));
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('on', v.id === 'v-' + view));
+  if (view === 'gebruikers') {
+    loadUsers().then(() => render());
+  } else {
+    render();
+  }
+}
+
+document.querySelectorAll('.nb').forEach(btn => {
+  btn.addEventListener('click', () => goView(btn.dataset.view));
+});
+
+function go(col, id) {
+  goView(col);
+  setTimeout(() => openPopup(col, id), 10);
+}
+
+// Drag & drop
+document.addEventListener('dragover', e => { if (!mediaToolId) return; e.preventDefault(); });
+document.addEventListener('drop', e => {
+  if (!mediaToolId) return;
+  e.preventDefault();
+  const f = [...e.dataTransfer.files].filter(f => f.type.startsWith('image/') || f.type.startsWith('video/'));
+  if (f.length) uploadFile(f[0]);
+});
+
+// ── Opstarten ─────────────────────────────────────────────────────────────────
+checkAuth();
+</script>
+</body>
+</html>
