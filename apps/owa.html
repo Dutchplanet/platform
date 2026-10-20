@@ -28,6 +28,7 @@
     --shadow-sm: 0 1px 8px rgba(39,46,72,0.07);
     --shadow-md: 0 10px 30px rgba(39,46,72,0.12);
     --radius: 10px;
+    --gutter: 20px;
   }
 
   body {
@@ -44,7 +45,7 @@
   a { color: inherit; }
   :focus-visible { outline: 3px solid var(--purple); outline-offset: 3px; border-radius: 6px; }
 
-  /* ── ICONEN: één set, lijn 1.75, afgeronde uiteinden ── */
+  /* -- ICONEN: een set, lijn 1.75, afgeronde uiteinden -- */
   .icon {
     width: 24px; height: 24px; fill: none; stroke: currentColor;
     stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0;
@@ -56,7 +57,7 @@
   }
   .icon-box .icon { width: 26px; height: 26px; }
 
-  /* ── NAVBAR ── */
+  /* -- NAVBAR -- */
   .nav-wrap { position: sticky; top: 12px; z-index: 100; max-width: 1000px; margin: 12px auto -78px; }
   .navbar {
     background: var(--white); border-radius: 100px; box-shadow: var(--shadow-md);
@@ -86,7 +87,7 @@
   .btn-ghost:hover { box-shadow: inset 0 0 0 2px #fff; }
   .nav-cta { margin-left: auto; padding: 11px 24px; font-size: 15px; }
 
-  /* ── VLAKKEN ── */
+  /* -- VLAKKEN -- */
   .hero, .problem-strip, .section, .partners-bg, .cta-section, .footer {
     max-width: 1440px; margin: 0 auto 10px; border-radius: var(--radius);
   }
@@ -105,8 +106,8 @@
   .dot { color: var(--pink); }
   .lead { font-size: 19px; color: var(--navy-soft); line-height: 1.65; }
 
-  /* ── HERO ── */
-  .hero { border-radius: 0 0 var(--radius) var(--radius); background: var(--navy); padding: 168px 40px 96px; text-align: center; position: relative; overflow: visible; }
+  /* -- HERO -- */
+  .hero { max-width: none; width: calc(100% + 2 * var(--gutter)); margin: 0 calc(-1 * var(--gutter)) 10px; border-radius: 0 0 var(--radius) var(--radius); background: var(--navy); padding: 168px 40px 96px; text-align: center; position: relative; overflow: visible; }
   .hero-inner { position: relative; z-index: 5; max-width: 880px; margin: 0 auto; }
   .hero .eyebrow { background: rgba(255,255,255,0.12); color: #fff; }
   .hero-title { font-size: clamp(42px, 6.5vw, 76px); color: #fff; margin-bottom: 28px; }
@@ -119,7 +120,7 @@
   }
   .hero-partners strong { color: #fff; font-weight: 700; }
 
-  /* ── PROBLEEM ── */
+  /* -- PROBLEEM -- */
   .problem-strip { background: var(--white); box-shadow: var(--shadow-sm); padding: 24px 40px; }
   .problem-grid { display: grid; grid-template-columns: repeat(3, 1fr); max-width: 1100px; margin: 0 auto; }
   .problem-item { padding: 40px 36px; position: relative; }
@@ -129,7 +130,7 @@
   .problem-title { font-size: 22px; margin-bottom: 10px; }
   .problem-desc { font-size: 16px; color: var(--navy-soft); }
 
-  /* ── INTRO ── */
+  /* -- INTRO -- */
   .intro-section { background: var(--bg); padding: 96px 40px; max-width: 1440px; margin: 0 auto 10px; border-radius: var(--radius); }
   .intro-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; position: relative; z-index: 5; }
   .intro-inner h2 { font-size: clamp(32px, 4vw, 48px); }
@@ -137,7 +138,7 @@
   .intro-inner p + p { margin-top: 18px; }
   .intro-inner strong { color: var(--navy); }
 
-  /* ── TOOLS ── */
+  /* -- TOOLS -- */
   .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
   .tool-card {
     background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
@@ -156,7 +157,7 @@
   .tool-features li { display: flex; gap: 12px; font-size: 15px; line-height: 1.5; }
   .tool-features .icon { width: 20px; height: 20px; color: var(--purple); margin-top: 2px; stroke-width: 2.25; }
 
-  /* ── WERKWIJZE ── */
+  /* -- WERKWIJZE -- */
   .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; counter-reset: step; }
   .step {
     background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 32px;
@@ -176,7 +177,7 @@
   }
   .step-tool-tag:hover { background: var(--purple); }
 
-  /* ── VOOR WIE ── */
+  /* -- VOOR WIE -- */
   .doelgroep-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
   .doelgroep-card {
     background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
@@ -186,7 +187,7 @@
   .doelgroep-title { font-size: 20px; margin-bottom: 8px; }
   .doelgroep-desc { font-size: 16px; color: var(--navy-soft); }
 
-  /* ── PARTNERS ── */
+  /* -- PARTNERS -- */
   .partners-bg { box-shadow: var(--shadow-sm); }
   .partner-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
   .partner-card {
@@ -202,7 +203,7 @@
   .partner-focus { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--purple); margin-bottom: 12px; }
   .partner-desc { font-size: 16px; color: var(--navy-soft); }
 
-  /* ── CTA ── */
+  /* -- CTA -- */
   .cta-section { background: var(--pink); padding: 96px 40px; }
   .cta-section .eyebrow { background: rgba(39,46,72,0.12); color: var(--navy); }
   .cta-section .dot { color: var(--navy); }
@@ -219,7 +220,7 @@
   .mail-link:hover { text-decoration-color: var(--navy); }
   .mail-link .icon { width: 20px; height: 20px; color: var(--navy); }
 
-  /* ── FOOTER ── */
+  /* -- FOOTER -- */
   .footer { background: var(--navy); padding: 56px 40px 32px; margin-bottom: 0; }
   .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
   .footer-logo img { height: 50px; display: block; }
@@ -233,7 +234,7 @@
     font-size: 14px; color: rgba(255,255,255,0.55); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
   }
 
-  /* ── DECO ── */
+  /* -- DECO -- */
   @keyframes fadeInDeco { from { opacity: 0; } to { opacity: 1; } }
   .hero-deco, .deco-left {
     position: absolute; z-index: 4; pointer-events: none; width: 220px; height: auto;
@@ -242,7 +243,7 @@
   .hero-deco { right: 0; top: 340px; transform: translateY(-50%); }
   .deco-left { left: -20px; }
 
-  /* ── REVEAL ── */
+  /* -- REVEAL -- */
   .js .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; transition-delay: var(--d, 0s); }
   .js .reveal.in { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) {
@@ -252,7 +253,7 @@
     .tool-card:hover, .step:hover, .doelgroep-card:hover, .btn:hover { transform: none; }
   }
 
-  /* ── RESPONSIVE ── */
+  /* -- RESPONSIVE -- */
   @media (max-width: 1000px) {
     .doelgroep-grid { grid-template-columns: repeat(2, 1fr); }
     .steps { grid-template-columns: repeat(2, 1fr); }
@@ -264,6 +265,7 @@
     .nav-links { display: none; }
   }
   @media (max-width: 768px) {
+    :root { --gutter: 10px; }
     body { font-size: 16px; padding: 0 10px 10px; }
     .section, .partners-bg, .intro-section { padding: 64px 22px; }
     .hero { padding: 136px 22px 70px; }
@@ -352,7 +354,7 @@
     <div class="problem-item reveal">
       <div class="icon-box"><svg class="icon"><use href="#i-docs"/></svg></div>
       <h3 class="problem-title">Veel documenten</h3>
-      <p class="problem-desc">Bestemmingsplannen omzetten naar één omgevingsplan kost veel handwerk.</p>
+      <p class="problem-desc">Bestemmingsplannen omzetten naar &#233;&#233;n omgevingsplan kost veel handwerk.</p>
     </div>
     <div class="problem-item reveal" style="--d:.1s">
       <div class="icon-box"><svg class="icon"><use href="#i-clock"/></svg></div>
@@ -384,7 +386,7 @@
     <div class="section-head reveal">
       <div class="eyebrow">Werkwijze</div>
       <h2 class="section-title">Van plan tot publicatie<span class="dot">.</span></h2>
-      <p class="lead">Het werken aan omgevingsdocumenten verloopt via een vaste keten van stappen. De partners van OWA ondersteunen gemeenten elk vanuit hun eigen expertise en met elkaars tooling uit de gedeelde toolbox, bij de eerste omzetting én bij elke wijziging daarna.</p>
+      <p class="lead">Het werken aan omgevingsdocumenten verloopt via een vaste keten van stappen. De partners van OWA ondersteunen gemeenten elk vanuit hun eigen expertise en met elkaars tooling uit de gedeelde toolbox, bij de eerste omzetting &#233;n bij elke wijziging daarna.</p>
     </div>
     <div class="steps">
       <div class="step reveal">
@@ -431,7 +433,7 @@
     <div class="section-head reveal">
       <div class="eyebrow">De toolbox</div>
       <h2 class="section-title">Gespecialiseerde tools, gezamenlijke aanpak<span class="dot">.</span></h2>
-      <p class="lead">Rho Adviseurs, FLO Legal en Witteveen+Bos brengen hun tools samen in één gezamenlijke toolbox voor gemeenten: een brede digitale basis waarop we verder bouwen. Binnen OWA werken we samen aan een gedeelde aanpak voor gemeenten, zodat je weet welke tool op welk moment in het proces past. Het aanbod groeit mee met de praktijk.</p>
+      <p class="lead">Rho Adviseurs, FLO Legal en Witteveen+Bos brengen hun tools samen in &#233;&#233;n gezamenlijke toolbox voor gemeenten: een brede digitale basis waarop we verder bouwen. Binnen OWA werken we samen aan een gedeelde aanpak voor gemeenten, zodat je weet welke tool op welk moment in het proces past. Het aanbod groeit mee met de praktijk.</p>
     </div>
     <div class="tools-grid">
 
@@ -439,7 +441,7 @@
         <div class="icon-box"><svg class="icon"><use href="#i-layers"/></svg></div>
         <div class="tool-meta"><span class="tool-badge">Witteveen+Bos</span></div>
         <h3 class="tool-header">HarmonisatieTool</h3>
-        <p class="tool-desc">Breng bestemmingsplannen in kaart en leg de basis voor één omgevingsplan. De HarmonisatieTool structureert de bestaande planregels en maakt overlap, verschillen en afwijkingen zichtbaar, zodat de professional gefundeerde harmonisatiekeuzes kan maken.</p>
+        <p class="tool-desc">Breng bestemmingsplannen in kaart en leg de basis voor &#233;&#233;n omgevingsplan. De HarmonisatieTool structureert de bestaande planregels en maakt overlap, verschillen en afwijkingen zichtbaar, zodat de professional gefundeerde harmonisatiekeuzes kan maken.</p>
         <ul class="tool-features">
           <li><svg class="icon"><use href="#i-check"/></svg>Structureren van bestaande bestemmingsplannen</li>
           <li><svg class="icon"><use href="#i-check"/></svg>Inzicht in overlap, verschillen en afwijkingen tussen planregels</li>
@@ -502,7 +504,7 @@
   <div class="section-inner">
     <div class="section-head reveal">
       <div class="eyebrow">Partners</div>
-      <h2 class="section-title">Drie partijen, één samenwerking<span class="dot">.</span></h2>
+      <h2 class="section-title">Drie partijen, &#233;&#233;n samenwerking<span class="dot">.</span></h2>
       <p class="lead">OWA is de samenwerking van Rho Adviseurs, FLO Legal en Witteveen+Bos: drie complementaire partijen die gezamenlijk de volledige keten afdekken, elk vanuit hun eigen tools en expertise.</p>
     </div>
     <div class="partner-cards">
@@ -534,7 +536,7 @@
     <div class="reveal">
       <div class="eyebrow">Contact</div>
       <h2 class="cta-title">Klaar om te beginnen?</h2>
-      <p class="cta-desc">Neem contact op met één van de partners voor een vrijblijvend gesprek over jouw gemeente en hoe OWA je kan ondersteunen.</p>
+      <p class="cta-desc">Neem contact op met &#233;&#233;n van de partners voor een vrijblijvend gesprek over jouw gemeente en hoe OWA je kan ondersteunen.</p>
     </div>
     <div class="contact-card reveal" style="--d:.1s">
       <div class="contact-label">E-mail</div>
@@ -561,7 +563,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2026 OWA · Omgevingswet Assistent</span>
+    <span>&#169; 2026 OWA &#183; Omgevingswet Assistent</span>
     <span>owa-platform.nl</span>
   </div>
 </footer>
