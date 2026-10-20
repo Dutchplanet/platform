@@ -4,699 +4,385 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OWA - Omgevingswet Assistent</title>
+<meta name="description" content="Rho Adviseurs, FLO Legal en Witteveen+Bos slaan binnen OWA de handen ineen voor digitale versnelling in het omgevingswetdomein.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>document.documentElement.className = 'js';</script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 110px; }
 
   :root {
     --navy: #272E48;
+    --navy-soft: #4A516B;      /* lopende tekst op wit, contrast 8:1 */
     --pink: #F77D8A;
     --purple: #6548FC;
-    --bg: #F4F4F4;
+    --purple-tint: #EFEBFF;
+    --bg: #F4F4F6;
     --white: #FFFFFF;
-    --grad: linear-gradient(90deg, #6548FC 0%, #F77D8A 100%);
+    --line: rgba(39,46,72,0.10);
+    --shadow-sm: 0 1px 8px rgba(39,46,72,0.07);
+    --shadow-md: 0 10px 30px rgba(39,46,72,0.12);
+    --radius: 10px;
   }
 
   body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--navy);
     background: white;
     padding: 20px;
     position: relative;
+    -webkit-font-smoothing: antialiased;
   }
+  h1, h2, h3, h4 { font-family: 'Nunito Sans', sans-serif; font-weight: 800; line-height: 1.15; letter-spacing: -0.01em; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--purple); outline-offset: 3px; border-radius: 6px; }
+
+  /* ── ICONEN: één set, lijn 1.75, afgeronde uiteinden ── */
+  .icon {
+    width: 24px; height: 24px; fill: none; stroke: currentColor;
+    stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0;
+  }
+  .icon-box {
+    width: 52px; height: 52px; border-radius: 14px;
+    background: var(--purple-tint); color: var(--purple);
+    display: grid; place-items: center; margin-bottom: 20px;
+  }
+  .icon-box .icon { width: 26px; height: 26px; }
 
   /* ── NAVBAR ── */
-  .nav-wrap {
-    position: sticky;
-    top: 10px;
-    z-index: 100;
-    max-width: 1000px;
-    margin: 0 auto 10px;
-  }
-  .nav-grad-bar {
-    height: 8px;
-    background: var(--grad);
-    border-radius: 100px 100px 0 0;
-  }
+  .nav-wrap { position: sticky; top: 12px; z-index: 100; max-width: 1000px; margin: 0 auto 10px; }
   .navbar {
-    background: var(--white);
-    border-radius: 0 0 100px 100px;
-    box-shadow: 0 4px 24px rgba(39,46,72,0.13);
-    overflow: hidden;
-    padding: 14px 28px;
-    display: flex;
-    align-items: center;
-    position: relative;
+    background: var(--white); border-radius: 100px; box-shadow: var(--shadow-md);
+    overflow: hidden; padding: 10px 12px 10px 28px;
+    display: flex; align-items: center; position: relative; min-height: 64px;
   }
   .nav-logo img { height: 32px; display: block; }
   .nav-links {
-    display: flex;
-    gap: 32px;
-    list-style: none;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    display: flex; gap: 6px; list-style: none;
+    position: absolute; left: 50%; transform: translateX(-50%);
   }
   .nav-links a {
-    text-decoration: none;
-    color: var(--navy);
-    font-size: 14px;
-    font-weight: 500;
-    opacity: 0.7;
-    transition: opacity 0.2s;
+    text-decoration: none; font-size: 15px; font-weight: 500; color: var(--navy-soft);
+    padding: 8px 16px; border-radius: 100px; transition: background .2s, color .2s;
   }
-  .nav-links a:hover { opacity: 1; }
-  .nav-cta {
-    margin-left: auto;
-    background: var(--pink);
-    color: white;
-    border: none;
-    border-radius: 100px;
-    padding: 9px 22px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
-    transition: opacity 0.2s;
+  .nav-links a:hover { background: var(--bg); color: var(--navy); }
+  .nav-links a.active { background: var(--purple-tint); color: var(--purple); }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; border-radius: 100px;
+    background: var(--pink); color: var(--navy); font-weight: 700; font-size: 16px;
+    padding: 14px 30px; text-decoration: none; transition: transform .2s, box-shadow .2s;
   }
-  .nav-cta:hover { opacity: 0.85; }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(247,125,138,0.45); }
+  .btn .icon { width: 18px; height: 18px; stroke-width: 2.25; transition: transform .2s; }
+  .btn:hover .icon { transform: translateX(3px); }
+  .btn-ghost { background: transparent; color: #fff; box-shadow: inset 0 0 0 2px rgba(255,255,255,0.3); }
+  .btn-ghost:hover { box-shadow: inset 0 0 0 2px #fff; }
+  .nav-cta { margin-left: auto; padding: 11px 24px; font-size: 15px; }
 
-  /* ── SECTIONS (vlakken) ── */
-  .hero, .problem-strip, .section, .cta-section, .footer {
-    max-width: 1440px;
-    margin: 0 auto 10px;
-    border-radius: 10px;
-    overflow: hidden;
+  /* ── VLAKKEN ── */
+  .hero, .problem-strip, .section, .partners-bg, .cta-section, .footer {
+    max-width: 1440px; margin: 0 auto 10px; border-radius: var(--radius);
   }
+  .section, .partners-bg { padding: 96px 40px; }
+  .section { background: var(--white); box-shadow: var(--shadow-sm); }
+  .section.bg-light, .partners-bg { background: var(--bg); }
+  .section-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 5; }
+  .section-head { max-width: 680px; margin-bottom: 56px; }
+
+  .eyebrow {
+    display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--purple); background: var(--purple-tint);
+    padding: 6px 14px; border-radius: 100px; margin-bottom: 20px;
+  }
+  .section-title { font-size: clamp(32px, 4vw, 48px); margin-bottom: 20px; }
+  .dot { color: var(--pink); }
+  .lead { font-size: 19px; color: var(--navy-soft); line-height: 1.65; }
 
   /* ── HERO ── */
-  .hero {
-    background: var(--navy);
-    padding: 100px 40px 80px;
-    text-align: center;
-    overflow: visible;
-    position: relative;
+  .hero { background: var(--navy); padding: 120px 40px 110px; text-align: center; position: relative; overflow: visible; }
+  .hero-inner { position: relative; z-index: 5; max-width: 880px; margin: 0 auto; }
+  .hero .eyebrow { background: rgba(255,255,255,0.12); color: #fff; }
+  .hero-title { font-size: clamp(42px, 6.5vw, 76px); color: #fff; margin-bottom: 28px; }
+  .hero-subtitle { font-size: 20px; line-height: 1.7; color: rgba(255,255,255,0.82); max-width: 760px; margin: 0 auto 44px; }
+  .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .hero-partners {
+    margin-top: 72px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.14);
+    display: flex; gap: 14px 40px; justify-content: center; flex-wrap: wrap;
+    font-size: 15px; color: rgba(255,255,255,0.7); font-weight: 500;
   }
-  .hero-inner {
-    position: relative;
-    z-index: 5;
-    max-width: 860px;
-    margin: 0 auto;
-  }
-  .hero-label {
-    display: inline-block;
-    background: rgba(255,255,255,0.12);
-    color: rgba(255,255,255,0.85);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 6px 16px;
-    border-radius: 100px;
-    margin-bottom: 24px;
-  }
-  .hero-title {
-    font-family: 'Nunito Sans', sans-serif;
-    font-weight: 800;
-    font-size: clamp(36px, 5vw, 64px);
-    line-height: 1.1;
-    color: white;
-    margin-bottom: 24px;
-  }
-  .hero-title-dot { color: var(--pink); }
-  .hero-subtitle {
-    font-size: 18px;
-    color: rgba(255,255,255,0.75);
-    line-height: 1.65;
-    max-width: 680px;
-    margin: 0 auto 40px;
-  }
-  .hero-cta {
-    display: inline-block;
-    background: var(--pink);
-    color: white;
-    border-radius: 100px;
-    padding: 14px 36px;
-    font-size: 16px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: opacity 0.2s;
-  }
-  .hero-cta:hover { opacity: 0.85; }
+  .hero-partners strong { color: #fff; font-weight: 700; }
 
-  /* ── PROBLEM STRIP ── */
-  .problem-strip {
-    background: var(--white);
-    box-shadow: 0 1px 8px rgba(39,46,72,0.07);
-  }
-  .problem-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-  .problem-item {
-    padding: 40px 40px;
-    position: relative;
-  }
+  /* ── PROBLEEM ── */
+  .problem-strip { background: var(--white); box-shadow: var(--shadow-sm); padding: 24px 40px; }
+  .problem-grid { display: grid; grid-template-columns: repeat(3, 1fr); max-width: 1100px; margin: 0 auto; }
+  .problem-item { padding: 40px 36px; position: relative; }
   .problem-item + .problem-item::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 20%;
-    height: 60%;
-    width: 1px;
-    background: rgba(39,46,72,0.10);
+    content: ''; position: absolute; left: 0; top: 20%; height: 60%; width: 1px; background: var(--line);
   }
-  .problem-icon {
-    font-size: 28px;
-    margin-bottom: 14px;
-  }
-  .problem-label {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--purple);
-    margin-bottom: 8px;
-  }
-  .problem-title {
-    font-family: 'Nunito Sans', sans-serif;
-    font-weight: 800;
-    font-size: 18px;
-    color: var(--navy);
-    margin-bottom: 10px;
-  }
-  .problem-title::after { content: '.'; color: var(--pink); }
-  .problem-desc {
-    font-size: 14px;
-    color: rgba(39,46,72,0.65);
-    line-height: 1.6;
-  }
+  .problem-title { font-size: 22px; margin-bottom: 10px; }
+  .problem-desc { font-size: 16px; color: var(--navy-soft); }
 
-  /* ── INTRO SECTION (new) ── */
-  .intro-section {
-    background: var(--bg);
-    padding: 60px 40px;
-    max-width: 1440px;
-    margin: 0 auto 10px;
-    border-radius: 10px;
-  }
-  .intro-inner {
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
-  }
-  .intro-inner h2 {
-    font-family: 'Nunito Sans', sans-serif;
-    font-weight: 800;
-    font-size: clamp(24px, 3vw, 36px);
-    color: var(--navy);
-    margin-bottom: 20px;
-  }
-  .intro-inner h2::after { content: '.'; color: var(--pink); }
-  .intro-inner p {
-    font-size: 16px;
-    color: rgba(39,46,72,0.75);
-    line-height: 1.7;
-    margin-bottom: 16px;
-  }
-  .intro-inner p:last-child { margin-bottom: 0; }
+  /* ── INTRO ── */
+  .intro-section { background: var(--bg); padding: 96px 40px; max-width: 1440px; margin: 0 auto 10px; border-radius: var(--radius); }
+  .intro-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; position: relative; z-index: 5; }
+  .intro-inner h2 { font-size: clamp(32px, 4vw, 48px); }
+  .intro-inner p { font-size: 18px; color: var(--navy-soft); }
+  .intro-inner p + p { margin-top: 18px; }
+  .intro-inner strong { color: var(--navy); }
 
-  /* ── SECTION generic ── */
-  .section {
-    background: var(--white);
-    padding: 60px 40px;
-    box-shadow: 0 1px 8px rgba(39,46,72,0.07);
-  }
-  .section.bg-light { background: var(--bg); box-shadow: none; }
-  .section-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 5;
-  }
-  .section-label {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--purple);
-    margin-bottom: 12px;
-  }
-  .section-title {
-    font-family: 'Nunito Sans', sans-serif;
-    font-weight: 800;
-    font-size: clamp(26px, 3vw, 40px);
-    color: var(--navy);
-    margin-bottom: 16px;
-    line-height: 1.15;
-  }
-  .section-title::after { content: '.'; color: var(--pink); }
-  .section-intro {
-    font-size: 16px;
-    color: rgba(39,46,72,0.7);
-    line-height: 1.65;
-    max-width: 640px;
-    margin-bottom: 48px;
-  }
-
-  /* ── TOOLS GRID ── */
-  .tools-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-  }
+  /* ── TOOLS ── */
+  .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
   .tool-card {
-    border: 1px solid rgba(39,46,72,0.1);
-    border-radius: 10px;
-    padding: 28px;
-    background: white;
-    box-shadow: 0 1px 8px rgba(39,46,72,0.06);
-    transition: box-shadow 0.2s;
+    background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 40px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column;
+    transition: transform .25s, box-shadow .25s;
   }
-  .tool-card:hover { box-shadow: 0 4px 20px rgba(39,46,72,0.12); }
+  .tool-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .tool-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
   .tool-badge {
-    display: inline-block;
-    background: var(--grad);
-    color: white;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    padding: 4px 12px;
-    border-radius: 100px;
-    margin-bottom: 16px;
-    white-space: nowrap;
+    display: inline-block; background: var(--purple-tint); color: var(--purple);
+    font-size: 13px; font-weight: 700; padding: 5px 14px; border-radius: 100px; white-space: nowrap;
   }
-  .tool-header {
-    font-family: 'Nunito Sans', sans-serif;
-    font-weight: 800;
-    font-size: 20px;
-    color: var(--navy);
-    margin-bottom: 12px;
-  }
-  .tool-header::after { content: '.'; color: var(--pink); }
-  .tool-desc {
-    font-size: 14px;
-    color: rgba(39,46,72,0.7);
-    line-height: 1.6;
-    margin-bottom: 20px;
-  }
-  .tool-features {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .tool-features li {
-    font-size: 13px;
-    color: rgba(39,46,72,0.75);
-    padding-left: 18px;
-    position: relative;
-    line-height: 1.45;
-  }
-  .tool-features li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 7px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--grad);
-    background: var(--purple);
-  }
-  .tool-partner {
-    font-size: 11px;
-    color: rgba(39,46,72,0.45);
-    margin-top: 20px;
-    font-weight: 500;
-  }
+  .tool-header { font-size: 30px; margin-bottom: 14px; }
+  .tool-desc { font-size: 17px; color: var(--navy-soft); margin-bottom: 28px; }
+  .tool-features { list-style: none; display: grid; gap: 14px; margin-top: auto; padding-top: 28px; border-top: 1px solid var(--line); }
+  .tool-features li { display: flex; gap: 12px; font-size: 16px; line-height: 1.5; }
+  .tool-features .icon { width: 20px; height: 20px; color: var(--purple); margin-top: 2px; stroke-width: 2.25; }
 
   /* ── WERKWIJZE ── */
-  .werkwijze-steps {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    margin-top: 8px;
-  }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; counter-reset: step; }
   .step {
-    display: grid;
-    grid-template-columns: 48px 1fr;
-    gap: 20px;
-    padding: 20px 0;
-    border-bottom: 1px solid rgba(39,46,72,0.08);
-    align-items: start;
+    background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 32px;
+    box-shadow: var(--shadow-sm); position: relative; display: flex; flex-direction: column;
+    transition: transform .25s, box-shadow .25s;
   }
-  .step:last-child { border-bottom: none; }
-  .step-num {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: var(--bg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Nunito Sans', sans-serif;
-    font-weight: 800;
-    font-size: 18px;
-    color: var(--navy);
-    flex-shrink: 0;
-  }
-  .step-content { padding-top: 4px; }
-  .step-title {
-    font-family: 'Nunito Sans', sans-serif;
-    font-weight: 800;
-    font-size: 16px;
-    color: var(--navy);
-    margin-bottom: 4px;
-  }
-  .step-title::after { content: '.'; color: var(--pink); }
-  .step-desc {
-    font-size: 14px;
-    color: rgba(39,46,72,0.65);
-    line-height: 1.55;
-  }
+  .step:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .step-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+  .step .icon-box { margin-bottom: 0; }
+  .step-num { font-family: 'Nunito Sans', sans-serif; font-weight: 800; font-size: 44px; line-height: 1; color: rgba(39,46,72,0.12); }
+  .step-title { font-size: 21px; margin-bottom: 8px; }
+  .step-desc { font-size: 16px; color: var(--navy-soft); }
   .step-tool-tag {
-    display: inline-block;
-    margin-top: 8px;
-    background: rgba(101,72,252,0.1);
-    color: var(--purple);
-    font-size: 11px;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 100px;
+    align-self: flex-start; margin-top: 18px; background: var(--navy); color: #fff;
+    font-size: 13px; font-weight: 700; padding: 5px 14px; border-radius: 100px;
   }
 
-  /* ── DOELGROEP (voor wie) ── */
-  .doelgroep-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 16px;
-    margin-top: 8px;
-  }
+  /* ── VOOR WIE ── */
+  .doelgroep-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
   .doelgroep-card {
-    background: white;
-    border: 1px solid rgba(39,46,72,0.1);
-    border-radius: 10px;
-    padding: 24px;
-    box-shadow: 0 1px 8px rgba(39,46,72,0.06);
+    background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 32px 28px; box-shadow: var(--shadow-sm); transition: transform .25s, box-shadow .25s;
   }
-  .doelgroep-icon { font-size: 24px; margin-bottom: 12px; }
-  .doelgroep-title {
-    font-family: 'Nunito Sans', sans-serif;
-    font-weight: 800;
-    font-size: 16px;
-    color: var(--navy);
-    margin-bottom: 8px;
-  }
-  .doelgroep-title::after { content: '.'; color: var(--pink); }
-  .doelgroep-desc {
-    font-size: 13px;
-    color: rgba(39,46,72,0.65);
-    line-height: 1.55;
-  }
+  .doelgroep-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .doelgroep-title { font-size: 20px; margin-bottom: 8px; }
+  .doelgroep-desc { font-size: 16px; color: var(--navy-soft); }
 
   /* ── PARTNERS ── */
-  .partners-bg {
-    max-width: 1440px;
-    margin: 0 auto 10px;
-    border-radius: 10px;
-    background: var(--bg);
-    padding: 60px 40px;
-    box-shadow: 0 1px 8px rgba(39,46,72,0.07);
-  }
-  .partners-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 5;
-  }
-  .partner-cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-top: 40px;
-  }
+  .partners-bg { box-shadow: var(--shadow-sm); }
+  .partner-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
   .partner-card {
-    background: white;
-    border: 1px solid rgba(39,46,72,0.1);
-    border-radius: 10px;
-    padding: 32px 28px;
-    box-shadow: 0 1px 8px rgba(39,46,72,0.06);
+    background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 40px 32px;
+    box-shadow: var(--shadow-sm); display: flex; flex-direction: column;
   }
-  .partner-logo {
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-  }
-  .partner-logo img { max-height: 44px; width: auto; }
-  .partner-logo img.logo-rho { max-height: 70px; }
-  .partner-logo img.logo-wb { max-height: 40px; }
-  .partner-name {
-    font-family: 'Nunito Sans', sans-serif;
-    font-weight: 800;
-    font-size: 18px;
-    color: var(--navy);
-    margin-bottom: 10px;
-  }
-  .partner-desc {
-    font-size: 14px;
-    color: rgba(39,46,72,0.65);
-    line-height: 1.6;
-  }
+  .partner-logo { height: 80px; display: flex; align-items: center; margin-bottom: 24px; }
+  .partner-logo img { width: auto; max-width: 100%; }
+  .partner-logo img.logo-rho { height: 70px; }
+  .partner-logo img.logo-flo { height: 44px; }
+  .partner-logo img.logo-wb { height: 40px; }
+  .partner-name { font-size: 22px; margin-bottom: 8px; }
+  .partner-focus { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--purple); margin-bottom: 12px; }
+  .partner-desc { font-size: 16px; color: var(--navy-soft); }
 
   /* ── CTA ── */
-  .cta-section {
-    background: var(--navy);
-    padding: 80px 40px;
-    text-align: center;
-  }
-  .cta-title {
-    font-family: 'Nunito Sans', sans-serif;
-    font-weight: 800;
-    font-size: clamp(28px, 4vw, 48px);
-    color: white;
-    margin-bottom: 20px;
-  }
-  .cta-title::after { content: '.'; color: var(--pink); }
-  .cta-desc {
-    font-size: 17px;
-    color: rgba(255,255,255,0.75);
-    line-height: 1.65;
-    max-width: 540px;
-    margin: 0 auto 36px;
-  }
-  .cta-btn {
-    display: inline-block;
-    background: var(--pink);
-    color: white;
-    border-radius: 100px;
-    padding: 14px 36px;
-    font-size: 16px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: opacity 0.2s;
-  }
-  .cta-btn:hover { opacity: 0.85; }
+  .cta-section { background: var(--navy); padding: 110px 40px; text-align: center; }
+  .cta-title { font-size: clamp(36px, 5vw, 60px); color: #fff; margin-bottom: 22px; }
+  .cta-desc { font-size: 20px; color: rgba(255,255,255,0.8); max-width: 580px; margin: 0 auto 40px; }
 
   /* ── FOOTER ── */
-  .footer {
-    background: var(--navy);
-    padding: 40px;
-    margin-bottom: 0;
-  }
-  .footer-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 32px;
-    flex-wrap: wrap;
-  }
-  .footer-logo img { height: 50px; }
-  .footer-desc {
-    font-size: 13px;
-    color: rgba(255,255,255,0.5);
-    line-height: 1.6;
-    margin-top: 12px;
-    max-width: 280px;
-  }
-  .footer-links h4 {
-    font-size: 12px;
-    font-weight: 600;
-    color: rgba(255,255,255,0.45);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 14px;
-  }
-  .footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-  .footer-links a {
-    font-size: 13px;
-    color: rgba(255,255,255,0.65);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .footer-links a:hover { color: white; }
+  .footer { background: var(--navy); padding: 56px 40px 32px; margin-bottom: 0; }
+  .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+  .footer-logo img { height: 50px; display: block; }
+  .footer-desc { font-size: 15px; color: rgba(255,255,255,0.65); margin-top: 16px; max-width: 320px; }
+  .footer-links h4 { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.55); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 16px; }
+  .footer-links ul { list-style: none; display: grid; gap: 10px; }
+  .footer-links a { font-size: 15px; color: rgba(255,255,255,0.85); text-decoration: none; }
+  .footer-links a:hover { color: #fff; text-decoration: underline; }
   .footer-bottom {
-    max-width: 1100px;
-    margin: 28px auto 0;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    font-size: 12px;
-    color: rgba(255,255,255,0.35);
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
+    max-width: 1100px; margin: 40px auto 0; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.12);
+    font-size: 14px; color: rgba(255,255,255,0.55); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
   }
 
-  /* ── DECO ELEMENTS ── */
+  /* ── DECO ── */
   @keyframes fadeInDeco { from { opacity: 0; } to { opacity: 1; } }
   .hero-deco, .deco-left {
-    position: absolute;
-    z-index: 4;
-    pointer-events: none;
-    width: 220px;
-    height: auto;
+    position: absolute; z-index: 4; pointer-events: none; width: 220px; height: auto;
     animation: fadeInDeco 1.2s ease 0.4s both;
   }
   .hero-deco { right: 0; top: 340px; transform: translateY(-50%); }
   .deco-left { left: -20px; }
-  @media (max-width: 900px) { .hero-deco, .deco-left { display: none; } }
+
+  /* ── REVEAL ── */
+  .js .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; transition-delay: var(--d, 0s); }
+  .js .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .js .reveal { opacity: 1; transform: none; transition: none; }
+    .hero-deco, .deco-left { animation: none; }
+    .tool-card:hover, .step:hover, .doelgroep-card:hover, .btn:hover { transform: none; }
+  }
 
   /* ── RESPONSIVE ── */
-  @media (max-width: 768px) {
-    body { padding: 10px; }
+  @media (max-width: 1000px) {
+    .doelgroep-grid { grid-template-columns: repeat(2, 1fr); }
+    .steps { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 900px) {
+    .hero-deco, .deco-left { display: none; }
+    .intro-inner { grid-template-columns: 1fr; gap: 24px; }
+    .tools-grid, .partner-cards { grid-template-columns: 1fr; }
     .nav-links { display: none; }
+  }
+  @media (max-width: 768px) {
+    body { font-size: 16px; padding: 10px; }
+    .section, .partners-bg, .intro-section { padding: 64px 22px; }
+    .hero { padding: 80px 22px 70px; }
+    .hero-subtitle, .lead, .cta-desc { font-size: 17px; }
+    .problem-strip { padding: 12px 22px; }
     .problem-grid { grid-template-columns: 1fr; }
-    .problem-item + .problem-item::after { display: none; }
-    .tools-grid { grid-template-columns: 1fr; }
-    .partner-cards { grid-template-columns: 1fr; }
-    .doelgroep-grid { grid-template-columns: 1fr 1fr; }
-    .section, .partners-bg, .intro-section { padding: 40px 20px; }
-    .hero { padding: 60px 20px 50px; }
-    .cta-section { padding: 60px 20px; }
-    .footer { padding: 32px 20px; }
+    .problem-item { padding: 28px 4px; }
+    .problem-item + .problem-item::after { left: 0; top: 0; height: 1px; width: 100%; }
+    .steps, .doelgroep-grid { grid-template-columns: 1fr; }
+    .tool-card { padding: 28px; }
+    .cta-section { padding: 72px 22px; }
+    .footer { padding: 40px 22px 24px; }
+    .navbar { padding-left: 20px; }
   }
 </style>
 </head>
 <body>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-docs" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.800 12 21 12 21z"/><circle cx="12" cy="9.500" r="2.500"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3L10 14"/><path d="M21 3l-7 18-4-7-7-4z"/></symbol>
+    <symbol id="i-building" viewBox="0 0 24 24"><path d="M4 21V9l8-5 8 5v12"/><path d="M2 21h20M9 21v-6h6v6M9 11h.01M15 11h.01"/></symbol>
+    <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 4v16M7 20h10M5 7h14"/><path d="M5 7l-3 7a3.500 3.500 0 0 0 6 0zM19 7l-3 7a3.500 3.500 0 0 0 6 0z"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4L3 6.500v13L9 17l6 3 6-2.500v-13L15 7z"/><path d="M9 4v13M15 7v13"/></symbol>
+    <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.500 8.500l-2 5-5 2 2-5z"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.500"/><path d="M2.500 20c.5-3.500 3.200-5.500 6.500-5.500s6 2 6.500 5.500"/><path d="M16 4.700a3.500 3.500 0 0 1 0 6.600M18 14.800c1.900.8 3.200 2.600 3.500 5.200"/></symbol>
+  </defs>
+</svg>
+
 <!-- NAVBAR -->
 <div class="nav-wrap">
-  <div class="nav-grad-bar"></div>
-  <nav class="navbar">
-    <div class="nav-logo">
-      <img src="img/logo-owa.svg" alt="OWA">
-    </div>
+  <nav class="navbar" aria-label="Hoofdmenu">
+    <a class="nav-logo" href="#top" aria-label="OWA, naar boven"><img src="img/logo-owa.svg" alt="OWA"></a>
     <ul class="nav-links">
-      <li><a href="#tools">Tools</a></li>
+      <li><a href="#tools">Toolbox</a></li>
       <li><a href="#werkwijze">Werkwijze</a></li>
       <li><a href="#doelgroep">Voor wie</a></li>
       <li><a href="#partners">Partners</a></li>
     </ul>
-    <a href="#contact" class="nav-cta">Contact</a>
+    <a href="#contact" class="btn nav-cta">Contact</a>
   </nav>
 </div>
 
 <!-- HERO -->
-<section class="hero">
+<header class="hero" id="top">
   <div class="hero-inner">
-    <div class="hero-label">Omgevingswet Assistent</div>
-    <h1 class="hero-title">
-      Digitale versnelling<br>voor gemeenten<span class="hero-title-dot">.</span>
-    </h1>
-    <p class="hero-subtitle">
-      Binnen OWA slaan Rho Adviseurs, FLO Legal en Witteveen+Bos de handen ineen voor digitale versnelling in het omgevingswetdomein. Door onze krachten te bundelen ondersteunen we gemeenten met behulp van digitale diensten bij het maken, beheren en verbeteren van omgevingsdocumenten in het DSO, nu en na 2032.
-    </p>
-    <a href="#contact" class="hero-cta">Neem contact op</a>
+    <div class="eyebrow">Omgevingswet Assistent</div>
+    <h1 class="hero-title">Digitale versnelling voor gemeenten<span class="dot">.</span></h1>
+    <p class="hero-subtitle">Binnen OWA slaan Rho Adviseurs, FLO Legal en Witteveen+Bos de handen ineen voor digitale versnelling in het omgevingswetdomein. Door onze krachten te bundelen ondersteunen we gemeenten met behulp van digitale diensten bij het maken, beheren en verbeteren van omgevingsdocumenten in het DSO, nu en na 2032.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn">Neem contact op <svg class="icon"><use href="#i-arrow"/></svg></a>
+      <a href="#tools" class="btn btn-ghost">Bekijk de toolbox</a>
+    </div>
+    <div class="hero-partners">
+      <span><strong>Rho Adviseurs</strong></span>
+      <span><strong>FLO Legal</strong></span>
+      <span><strong>Witteveen+Bos</strong></span>
+    </div>
   </div>
-</section>
+</header>
 
-<!-- PROBLEM STRIP -->
+<!-- PROBLEEM -->
 <div class="problem-strip">
   <div class="problem-grid">
-    <div class="problem-item">
-      <div class="problem-icon">📄</div>
-      <div class="problem-label">Omgevingsdocumenten</div>
-      <div class="problem-title">Complexe regelstructuren</div>
-      <p class="problem-desc">Omgevingsplannen vereisen consistente, DSO-conforme documentatie. Handmatig werken kost tijd en vergroot de kans op fouten.</p>
+    <div class="problem-item reveal">
+      <div class="icon-box"><svg class="icon"><use href="#i-docs"/></svg></div>
+      <h3 class="problem-title">Veel documenten</h3>
+      <p class="problem-desc">Bestemmingsplannen omzetten naar één omgevingsplan kost veel handwerk.</p>
     </div>
-    <div class="problem-item">
-      <div class="problem-icon">👥</div>
-      <div class="problem-label">Capaciteit</div>
-      <div class="problem-title">Schaarse expertise</div>
-      <p class="problem-desc">Gemeenten kampen met beperkte capaciteit en kennis om de transitie zelfstandig te doorlopen. Specialistische ondersteuning is onmisbaar.</p>
+    <div class="problem-item reveal" style="--d:.1s">
+      <div class="icon-box"><svg class="icon"><use href="#i-clock"/></svg></div>
+      <h3 class="problem-title">Te weinig capaciteit</h3>
+      <p class="problem-desc">Gemeenten missen tijd en specialisten om dit zelf op te lossen.</p>
     </div>
-    <div class="problem-item">
-      <div class="problem-icon">✅</div>
-      <div class="problem-label">Menselijke validatie</div>
-      <div class="problem-title">Kwaliteitscontrole blijft mensenwerk</div>
-      <p class="problem-desc">Digitale tools versnellen het proces, maar de inhoudelijke en juridische controle blijft bij de professional.</p>
+    <div class="problem-item reveal" style="--d:.2s">
+      <div class="icon-box"><svg class="icon"><use href="#i-shield"/></svg></div>
+      <h3 class="problem-title">Menselijke validatie</h3>
+      <p class="problem-desc">Kwaliteit vraagt om de blik van een professional, ook met slimme tools.</p>
     </div>
   </div>
 </div>
 
-<!-- INTRO: digitale meerwaarde en aanpak -->
+<!-- INTRO -->
 <section class="intro-section">
   <div class="intro-inner">
-    <h2>Digitale versnelling, met de professional aan het roer</h2>
-    <p>Rho Adviseurs, FLO Legal en Witteveen+Bos combineren hun kennis van ruimtelijke ordening, juridische regels en de fysieke leefomgeving met digitale tools. Dat geeft meer kwaliteit en consistentie in de complexe werkprocessen en maakt de omzetting naar het omgevingsplan sneller.</p>
-    <p>Onze krachtenbundeling heet OWA, de Omgevingswet Assistent. We werken samen in projecten, halen feedback op uit de praktijk en verbeteren onze tools en advisering gezamenlijk. De inhoudelijke en juridische controle blijft bij de professional.</p>
+    <h2 class="reveal">Digitale versnelling, met de professional aan het roer<span class="dot">.</span></h2>
+    <div class="reveal" style="--d:.1s">
+      <p>Rho Adviseurs, FLO Legal en Witteveen+Bos combineren hun kennis van ruimtelijke ordening, juridische regels en de fysieke leefomgeving met digitale tools. Dat geeft meer kwaliteit en consistentie in de complexe werkprocessen en maakt de omzetting naar het omgevingsplan sneller.</p>
+      <p>Onze krachtenbundeling heet OWA, de <strong>Omgevingswet Assistent</strong>. We werken samen in projecten, halen feedback op uit de praktijk en verbeteren onze tools en advisering gezamenlijk. De inhoudelijke en juridische controle blijft bij de professional.</p>
+    </div>
   </div>
 </section>
 
 <!-- TOOLS -->
 <section class="section" id="tools">
   <div class="section-inner">
-    <div class="section-label">De toolbox</div>
-    <h2 class="section-title">Gespecialiseerde tools, gezamenlijke aanpak</h2>
-    <p class="section-intro">Rho Adviseurs, FLO Legal en Witteveen+Bos brengen hun tools samen in één gezamenlijke toolbox voor gemeenten: een brede digitale basis waarop we verder bouwen. Binnen OWA werken we samen aan een gedeelde aanpak voor gemeenten, zodat je weet welke tool op welk moment in het proces past. Het aanbod groeit mee met de praktijk.</p>
+    <div class="section-head reveal">
+      <div class="eyebrow">De toolbox</div>
+      <h2 class="section-title">Gespecialiseerde tools, gezamenlijke aanpak<span class="dot">.</span></h2>
+      <p class="lead">Rho Adviseurs, FLO Legal en Witteveen+Bos brengen hun tools samen in één gezamenlijke toolbox voor gemeenten: een brede digitale basis waarop we verder bouwen. Binnen OWA werken we samen aan een gedeelde aanpak voor gemeenten, zodat je weet welke tool op welk moment in het proces past. Het aanbod groeit mee met de praktijk.</p>
+    </div>
     <div class="tools-grid">
 
-      <div class="tool-card">
-        <div class="tool-badge">Rho Adviseurs</div>
-        <div class="tool-header">HarmonisatieTool</div>
+      <article class="tool-card reveal">
+        <div class="icon-box"><svg class="icon"><use href="#i-layers"/></svg></div>
+        <div class="tool-meta"><span class="tool-badge">Stap 1</span></div>
+        <h3 class="tool-header">HarmonisatieTool</h3>
         <p class="tool-desc">Breng bestemmingsplannen in kaart en leg de basis voor één omgevingsplan. De HarmonisatieTool structureert de bestaande planregels en maakt overlap, verschillen en afwijkingen zichtbaar, zodat de professional gefundeerde harmonisatiekeuzes kan maken.</p>
         <ul class="tool-features">
-          <li>Structureren van bestaande bestemmingsplannen</li>
-          <li>Inzicht in overlap, verschillen en afwijkingen tussen planregels</li>
-          <li>Ondersteuning bij harmonisatiekeuzes, die bij de professional blijven</li>
-          <li>Uitgangspunt voor het omgevingsplan</li>
+          <li><svg class="icon"><use href="#i-check"/></svg>Structureren van bestaande bestemmingsplannen</li>
+          <li><svg class="icon"><use href="#i-check"/></svg>Inzicht in overlap, verschillen en afwijkingen tussen planregels</li>
+          <li><svg class="icon"><use href="#i-check"/></svg>Ondersteuning bij harmonisatiekeuzes, die bij de professional blijven</li>
+          <li><svg class="icon"><use href="#i-check"/></svg>Uitgangspunt voor het omgevingsplan</li>
         </ul>
-        <div class="tool-partner">Door Rho Adviseurs</div>
-      </div>
+      </article>
 
-      <div class="tool-card">
-        <div class="tool-badge">FLO Legal</div>
-        <div class="tool-header">ODV</div>
+      <article class="tool-card reveal" style="--d:.1s">
+        <div class="icon-box"><svg class="icon"><use href="#i-search"/></svg></div>
+        <div class="tool-meta"><span class="tool-badge">Stap 3 t/m 5</span></div>
+        <h3 class="tool-header">ODV</h3>
         <p class="tool-desc">Bekijk, doorzoek en bewerk de regels in omgevingsdocumenten. De ODV bestaat uit een regelview, een zoekfunctie en een editor waarmee je regels schrijft en exporteert naar GISKit.</p>
         <ul class="tool-features">
-          <li>Regelview: inzicht in de regels van een omgevingsdocument</li>
-          <li>Zoekfunctie over regels</li>
-          <li>Editor om regels te schrijven en te exporteren naar GISKit</li>
-          <li>ISO-gecertificeerd en DSO-compliant</li>
+          <li><svg class="icon"><use href="#i-check"/></svg>Regelview: inzicht in de regels van een omgevingsdocument</li>
+          <li><svg class="icon"><use href="#i-check"/></svg>Zoekfunctie over regels</li>
+          <li><svg class="icon"><use href="#i-check"/></svg>Editor om regels te schrijven en te exporteren naar GISKit</li>
         </ul>
-        <div class="tool-partner">Door FLO Legal</div>
-      </div>
-
-      <div class="tool-card">
-        <div class="tool-badge">Witteveen+Bos</div>
-        <div class="tool-header">GISKit</div>
-        <p class="tool-desc">Beheer en visualiseer geo-informatie voor omgevingsdocumenten. GISKit ondersteunt het koppelen van geografische data aan juridische regels, compliant met de DSO-standaard.</p>
-        <ul class="tool-features">
-          <li>Geo-annotaties voor omgevingsdocumenten</li>
-          <li>Koppeling van geografische data aan regels</li>
-          <li>DSO-compliant kaartbeheer</li>
-          <li>Samenwerking met de ODV-editor</li>
-        </ul>
-        <div class="tool-partner">Door Witteveen+Bos</div>
-      </div>
+      </article>
 
     </div>
   </div>
@@ -705,143 +391,132 @@
 <!-- WERKWIJZE -->
 <section class="section bg-light" id="werkwijze">
   <div class="section-inner">
-    <div class="section-label">Werkwijze</div>
-    <h2 class="section-title">Van plan tot publicatie</h2>
-    <p class="section-intro">Het werken aan omgevingsdocumenten verloopt via een vaste keten van stappen. De partners van OWA ondersteunen gemeenten elk vanuit hun eigen expertise en met elkaars tooling uit de gedeelde toolbox, bij de eerste omzetting én bij elke wijziging daarna.</p>
-    <div class="werkwijze-steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-content">
-          <div class="step-title">Analyse bestaande plannen</div>
-          <p class="step-desc">De bestaande bestemmingsplannen en regelstructuren worden geanalyseerd op overlap, inconsistenties en beleidssediment.</p>
-          <span class="step-tool-tag">HarmonisatieTool</span>
-        </div>
+    <div class="section-head reveal">
+      <div class="eyebrow">Werkwijze</div>
+      <h2 class="section-title">Van plan tot publicatie<span class="dot">.</span></h2>
+      <p class="lead">Het werken aan omgevingsdocumenten verloopt via een vaste keten van stappen. De partners van OWA ondersteunen gemeenten elk vanuit hun eigen expertise en met elkaars tooling uit de gedeelde toolbox, bij de eerste omzetting én bij elke wijziging daarna.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-top"><div class="icon-box"><svg class="icon"><use href="#i-search"/></svg></div><span class="step-num">01</span></div>
+        <h3 class="step-title">Analyseren</h3>
+        <p class="step-desc">Bestaande plannen worden doorgelicht op overlap en afwijkingen.</p>
+        <span class="step-tool-tag">HarmonisatieTool</span>
       </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-content">
-          <div class="step-title">Harmonisatie en keuzes</div>
-          <p class="step-desc">Op basis van de analyse maakt de professional weloverwogen harmonisatiekeuzes voor het toekomstige omgevingsplan.</p>
-        </div>
+      <div class="step reveal" style="--d:.08s">
+        <div class="step-top"><div class="icon-box"><svg class="icon"><use href="#i-compass"/></svg></div><span class="step-num">02</span></div>
+        <h3 class="step-title">Kiezen</h3>
+        <p class="step-desc">De professional maakt de harmonisatiekeuzes voor het omgevingsplan.</p>
       </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-content">
-          <div class="step-title">Opstellen van regels</div>
-          <p class="step-desc">De juridische regels worden opgesteld in de DSO-standaard, met ondersteuning van digitale tools voor consistentie en kwaliteit.</p>
-          <span class="step-tool-tag">ODV</span>
-        </div>
+      <div class="step reveal" style="--d:.16s">
+        <div class="step-top"><div class="icon-box"><svg class="icon"><use href="#i-edit"/></svg></div><span class="step-num">03</span></div>
+        <h3 class="step-title">Regels opstellen</h3>
+        <p class="step-desc">Regels schrijven volgens de DSO-standaard, consistent en juridisch sluitend.</p>
+        <span class="step-tool-tag">ODV</span>
       </div>
-      <div class="step">
-        <div class="step-num">4</div>
-        <div class="step-content">
-          <div class="step-title">Geo-annotaties en kaarten</div>
-          <p class="step-desc">Geografische informatie wordt gekoppeld aan de juridische regels, zodat het omgevingsplan compleet en raadpleegbaar is in het DSO.</p>
-          <span class="step-tool-tag">ODV</span>
-        </div>
+      <div class="step reveal">
+        <div class="step-top"><div class="icon-box"><svg class="icon"><use href="#i-pin"/></svg></div><span class="step-num">04</span></div>
+        <h3 class="step-title">Locatie koppelen</h3>
+        <p class="step-desc">Regels krijgen een plek op de kaart, zodat ze raadpleegbaar zijn.</p>
+        <span class="step-tool-tag">ODV</span>
       </div>
-      <div class="step">
-        <div class="step-num">5</div>
-        <div class="step-content">
-          <div class="step-title">Kwaliteitscontrole</div>
-          <p class="step-desc">Het document wordt gecontroleerd op juridische en technische correctheid voordat het gepubliceerd wordt.</p>
-          <span class="step-tool-tag">ODV</span>
-        </div>
+      <div class="step reveal" style="--d:.08s">
+        <div class="step-top"><div class="icon-box"><svg class="icon"><use href="#i-shield"/></svg></div><span class="step-num">05</span></div>
+        <h3 class="step-title">Controleren</h3>
+        <p class="step-desc">Juridische en technische check voordat er iets wordt gepubliceerd.</p>
+        <span class="step-tool-tag">ODV</span>
       </div>
-      <div class="step">
-        <div class="step-num">6</div>
-        <div class="step-content">
-          <div class="step-title">Publicatie in het DSO</div>
-          <p class="step-desc">Het definitieve omgevingsdocument wordt gepubliceerd in het Digitaal Stelsel Omgevingswet, klaar voor raadpleging door burgers en bedrijven.</p>
-        </div>
+      <div class="step reveal" style="--d:.16s">
+        <div class="step-top"><div class="icon-box"><svg class="icon"><use href="#i-send"/></svg></div><span class="step-num">06</span></div>
+        <h3 class="step-title">Publiceren</h3>
+        <p class="step-desc">Het omgevingsdocument gaat naar het DSO, klaar voor raadpleging.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- VOOR WIE (doelgroep) -->
+<!-- VOOR WIE -->
 <section class="section" id="doelgroep">
   <div class="section-inner">
-    <div class="section-label">Voor wie</div>
-    <h2 class="section-title">Gemeenten die werken aan het omgevingsplan</h2>
-    <p class="section-intro">OWA ondersteunt gemeenten in alle fasen van de omgevingsplanprocedure, van de eerste omzetting tot doorlopend beheer en wijzigingen.</p>
+    <div class="section-head reveal">
+      <div class="eyebrow">Voor wie</div>
+      <h2 class="section-title">Voor iedereen rond het omgevingsplan<span class="dot">.</span></h2>
+      <p class="lead">Van eerste omzetting tot doorlopend beheer: OWA helpt gemeenten in elke fase.</p>
+    </div>
     <div class="doelgroep-grid">
-      <div class="doelgroep-card">
-        <div class="doelgroep-icon">🏛️</div>
-        <div class="doelgroep-title">Gemeentelijke planteams</div>
-        <p class="doelgroep-desc">Teams die verantwoordelijk zijn voor het opstellen en beheren van het omgevingsplan, van kleine tot grote gemeenten.</p>
+      <div class="doelgroep-card reveal">
+        <div class="icon-box"><svg class="icon"><use href="#i-building"/></svg></div>
+        <h3 class="doelgroep-title">Planteams</h3>
+        <p class="doelgroep-desc">Stellen het omgevingsplan op en houden het actueel.</p>
       </div>
-      <div class="doelgroep-card">
-        <div class="doelgroep-icon">⚖️</div>
-        <div class="doelgroep-title">Juridisch adviseurs</div>
-        <p class="doelgroep-desc">Juristen die de kwaliteit en rechtmatigheid van omgevingsdocumenten bewaken en toetsen aan wet- en regelgeving.</p>
+      <div class="doelgroep-card reveal" style="--d:.08s">
+        <div class="icon-box"><svg class="icon"><use href="#i-scale"/></svg></div>
+        <h3 class="doelgroep-title">Juristen</h3>
+        <p class="doelgroep-desc">Bewaken de juridische kwaliteit van regels en documenten.</p>
       </div>
-      <div class="doelgroep-card">
-        <div class="doelgroep-icon">🗺️</div>
-        <div class="doelgroep-title">GIS-specialisten</div>
-        <p class="doelgroep-desc">Geografische informatieprofessionals die werken aan de ruimtelijke visualisatie en data-koppeling in omgevingsdocumenten.</p>
+      <div class="doelgroep-card reveal" style="--d:.16s">
+        <div class="icon-box"><svg class="icon"><use href="#i-map"/></svg></div>
+        <h3 class="doelgroep-title">GIS-specialisten</h3>
+        <p class="doelgroep-desc">Koppelen regels aan locaties en kaartdata.</p>
       </div>
-      <div class="doelgroep-card">
-        <div class="doelgroep-icon">🏗️</div>
-        <div class="doelgroep-title">Ruimtelijke ordeningsadvies</div>
-        <p class="doelgroep-desc">Adviesbureaus en consultants die gemeenten begeleiden bij de transitie naar het omgevingsplan en het DSO.</p>
+      <div class="doelgroep-card reveal" style="--d:.24s">
+        <div class="icon-box"><svg class="icon"><use href="#i-users"/></svg></div>
+        <h3 class="doelgroep-title">Adviseurs</h3>
+        <p class="doelgroep-desc">Begeleiden gemeenten bij de overgang naar het omgevingsplan.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- PARTNERS -->
-<div class="partners-bg" id="partners">
-  <div class="partners-inner">
-    <div class="section-label">Partners</div>
-    <h2 class="section-title">Drie partijen, één samenwerking</h2>
-    <p class="section-intro">OWA is de samenwerking van Rho Adviseurs, FLO Legal en Witteveen+Bos: drie complementaire partijen die gezamenlijk de volledige keten afdekken, elk vanuit hun eigen tools en expertise.</p>
+<section class="partners-bg" id="partners">
+  <div class="section-inner">
+    <div class="section-head reveal">
+      <div class="eyebrow">Partners</div>
+      <h2 class="section-title">Drie partijen, één samenwerking<span class="dot">.</span></h2>
+      <p class="lead">OWA is de samenwerking van Rho Adviseurs, FLO Legal en Witteveen+Bos: drie complementaire partijen die gezamenlijk de volledige keten afdekken, elk vanuit hun eigen tools en expertise.</p>
+    </div>
     <div class="partner-cards">
-      <div class="partner-card">
-        <div class="partner-logo">
-          <img src="img/rho-adviseurs.png" alt="Rho Adviseurs" class="logo-rho">
-        </div>
-        <div class="partner-name">Rho Adviseurs</div>
-        <p class="partner-desc">Ruimtelijk adviesbureau met specialistische kennis van bestemmingsplannen, omgevingsplannen en het DSO. Ontwikkelaar van de HarmonisatieTool.</p>
+      <div class="partner-card reveal">
+        <div class="partner-logo"><img src="img/rho-adviseurs.png" alt="Rho Adviseurs" class="logo-rho"></div>
+        <div class="partner-focus">Ruimtelijke ordening</div>
+        <h3 class="partner-name">Rho Adviseurs</h3>
+        <p class="partner-desc">Brengt kennis van ruimtelijke ordening en omgevingsplannen in.</p>
       </div>
-      <div class="partner-card">
-        <div class="partner-logo">
-          <img src="img/flo legal.png" alt="FLO Legal">
-        </div>
-        <div class="partner-name">FLO Legal</div>
-        <p class="partner-desc">Juridisch adviesbureau gespecialiseerd in omgevingsrecht en digitale regelgeving. Ontwikkelaar van de Omgevingsdocument Verkenner (ODV).</p>
+      <div class="partner-card reveal" style="--d:.1s">
+        <div class="partner-logo"><img src="img/flo legal.png" alt="FLO Legal" class="logo-flo"></div>
+        <div class="partner-focus">Juridische regels</div>
+        <h3 class="partner-name">FLO Legal</h3>
+        <p class="partner-desc">Brengt juridische expertise in en ontwikkelde de ODV.</p>
       </div>
-      <div class="partner-card">
-        <div class="partner-logo">
-          <img src="img/WB-logo.png" alt="Witteveen+Bos" class="logo-wb">
-        </div>
-        <div class="partner-name">Witteveen+Bos</div>
-        <p class="partner-desc">Ingenieursbureau met expertise in de fysieke leefomgeving, geo-informatie en digitale infrastructuur. Ontwikkelaar van GISKit.</p>
+      <div class="partner-card reveal" style="--d:.2s">
+        <div class="partner-logo"><img src="img/WB-logo.png" alt="Witteveen+Bos" class="logo-wb"></div>
+        <div class="partner-focus">Fysieke leefomgeving</div>
+        <h3 class="partner-name">Witteveen+Bos</h3>
+        <p class="partner-desc">Brengt kennis van de fysieke leefomgeving en geo-informatie in.</p>
       </div>
     </div>
   </div>
-</div>
+</section>
 
 <!-- CTA -->
 <section class="cta-section" id="contact">
-  <h2 class="cta-title">Klaar om te beginnen</h2>
-  <p class="cta-desc">Neem contact op met één van de partners voor een vrijblijvend gesprek over jouw gemeente en hoe OWA je kan ondersteunen.</p>
-  <a href="mailto:joliene.klooster@witteveenbos.com" class="cta-btn">Neem contact op</a>
+  <h2 class="cta-title reveal">Klaar om te beginnen<span class="dot">?</span></h2>
+  <p class="cta-desc reveal" style="--d:.1s">Neem contact op met één van de partners voor een vrijblijvend gesprek over jouw gemeente en hoe OWA je kan ondersteunen.</p>
+  <a href="mailto:joliene.klooster@witteveenbos.com" class="btn reveal" style="--d:.2s">Stuur een e-mail <svg class="icon"><use href="#i-arrow"/></svg></a>
 </section>
 
 <!-- FOOTER -->
 <footer class="footer">
   <div class="footer-inner">
-    <div class="footer-brand">
-      <div class="footer-logo">
-        <img src="img/logo-white.svg" alt="OWA">
-      </div>
+    <div>
+      <div class="footer-logo"><img src="img/logo-white.svg" alt="OWA"></div>
       <p class="footer-desc">Omgevingswet Assistent: digitale tools voor gemeenten die werken aan het omgevingsplan.</p>
     </div>
     <div class="footer-links">
       <h4>Navigatie</h4>
       <ul>
-        <li><a href="#tools">Tools</a></li>
+        <li><a href="#tools">Toolbox</a></li>
         <li><a href="#werkwijze">Werkwijze</a></li>
         <li><a href="#doelgroep">Voor wie</a></li>
         <li><a href="#partners">Partners</a></li>
@@ -849,9 +524,7 @@
     </div>
     <div class="footer-links">
       <h4>Contact</h4>
-      <ul>
-        <li><a href="mailto:joliene.klooster@witteveenbos.com">joliene.klooster@witteveenbos.com</a></li>
-      </ul>
+      <ul><li><a href="mailto:joliene.klooster@witteveenbos.com">joliene.klooster@witteveenbos.com</a></li></ul>
     </div>
   </div>
   <div class="footer-bottom">
@@ -860,23 +533,52 @@
   </div>
 </footer>
 
-<!-- DECORATIVE ELEMENTS -->
 <img class="hero-deco" id="heroDeco" src="img/element.svg" alt="">
 <img class="deco-left" id="decoLeft" src="img/element-onder.svg" alt="">
 
 <script>
-(function(){
+(function () {
   var right = document.getElementById('heroDeco');
   var left = document.getElementById('decoLeft');
   var section = document.getElementById('doelgroep');
-  var sectionMid = section.offsetTop + section.offsetHeight / 2;
-  left.style.top = sectionMid + 'px';
-  window.addEventListener('scroll', function(){
+  var sectionMid = 0;
+  function measure() {
+    sectionMid = section.offsetTop + section.offsetHeight / 2;
+    left.style.top = sectionMid + 'px';
+  }
+  measure();
+  window.addEventListener('load', measure);
+  window.addEventListener('resize', measure);
+  window.addEventListener('scroll', function () {
     var sy = window.scrollY;
     right.style.transform = 'translateY(calc(-50% + ' + (sy * 0.4) + 'px))';
-    var rel = (sy - sectionMid) * -0.4;
-    left.style.transform = 'translateY(calc(-50% + ' + rel + 'px))';
+    left.style.transform = 'translateY(calc(-50% + ' + ((sy - sectionMid) * -0.4) + 'px))';
   }, { passive: true });
+
+  var items = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    items.forEach(function (el) { io.observe(el); });
+  } else {
+    items.forEach(function (el) { el.classList.add('in'); });
+  }
+
+  var links = document.querySelectorAll('.nav-links a');
+  var map = {};
+  links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+  if ('IntersectionObserver' in window) {
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting && map[e.target.id]) {
+          links.forEach(function (a) { a.classList.remove('active'); });
+          map[e.target.id].classList.add('active');
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    Object.keys(map).forEach(function (id) { var s = document.getElementById(id); if (s) spy.observe(s); });
+  }
 })();
 </script>
 
