@@ -103,7 +103,7 @@
   .lead { font-size: 19px; color: var(--navy-soft); line-height: 1.65; }
 
   /* ── HERO ── */
-  .hero { background: var(--navy); padding: 120px 40px 110px; text-align: center; position: relative; overflow: visible; }
+  .hero { background: var(--navy); padding: 72px 40px 96px; text-align: center; position: relative; overflow: visible; }
   .hero-inner { position: relative; z-index: 5; max-width: 880px; margin: 0 auto; }
   .hero .eyebrow { background: rgba(255,255,255,0.12); color: #fff; }
   .hero-title { font-size: clamp(42px, 6.5vw, 76px); color: #fff; margin-bottom: 28px; }
@@ -200,6 +200,14 @@
   /* ── CTA ── */
   .cta-section { background: var(--navy); padding: 110px 40px; text-align: center; }
   .cta-title { font-size: clamp(36px, 5vw, 60px); color: #fff; margin-bottom: 22px; }
+  .cta-section .eyebrow { background: rgba(255,255,255,0.12); color: #fff; }
+  .mail-link {
+    display: inline-flex; align-items: center; gap: 14px; background: var(--pink); color: var(--navy);
+    font-weight: 700; font-size: clamp(17px, 2.4vw, 24px); padding: 18px 36px; border-radius: 100px;
+    text-decoration: none; word-break: break-all; transition: transform .2s, box-shadow .2s;
+  }
+  .mail-link:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(247,125,138,0.45); }
+  .mail-link .icon { width: 26px; height: 26px; stroke-width: 2; }
   .cta-desc { font-size: 20px; color: rgba(255,255,255,0.8); max-width: 580px; margin: 0 auto 40px; }
 
   /* ── FOOTER ── */
@@ -268,6 +276,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.500"/><path d="M3.500 7l8.500 6.500L20.500 7"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
     <symbol id="i-docs" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></symbol>
     <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
@@ -303,7 +312,7 @@
 <header class="hero" id="top">
   <div class="hero-inner">
     <div class="eyebrow">Omgevingswet Assistent</div>
-    <h1 class="hero-title">Digitale versnelling voor gemeenten<span class="dot">.</span></h1>
+    <h1 class="hero-title">Werken aan het digitale omgevingsplan<span class="dot">.</span></h1>
     <p class="hero-subtitle">Binnen OWA slaan Rho Adviseurs, FLO Legal en Witteveen+Bos de handen ineen voor digitale versnelling in het omgevingswetdomein. Door onze krachten te bundelen ondersteunen we gemeenten met behulp van digitale diensten bij het maken, beheren en verbeteren van omgevingsdocumenten in het DSO, nu en na 2032.</p>
     <div class="hero-actions">
       <a href="#contact" class="btn">Neem contact op <svg class="icon"><use href="#i-arrow"/></svg></a>
@@ -361,7 +370,7 @@
 
       <article class="tool-card reveal">
         <div class="icon-box"><svg class="icon"><use href="#i-layers"/></svg></div>
-        <div class="tool-meta"><span class="tool-badge">Stap 1</span></div>
+        <div class="tool-meta"><span class="tool-badge">Witteveen+Bos</span></div>
         <h3 class="tool-header">HarmonisatieTool</h3>
         <p class="tool-desc">Breng bestemmingsplannen in kaart en leg de basis voor één omgevingsplan. De HarmonisatieTool structureert de bestaande planregels en maakt overlap, verschillen en afwijkingen zichtbaar, zodat de professional gefundeerde harmonisatiekeuzes kan maken.</p>
         <ul class="tool-features">
@@ -374,7 +383,7 @@
 
       <article class="tool-card reveal" style="--d:.1s">
         <div class="icon-box"><svg class="icon"><use href="#i-search"/></svg></div>
-        <div class="tool-meta"><span class="tool-badge">Stap 3 t/m 5</span></div>
+        <div class="tool-meta"><span class="tool-badge">FLO Legal</span></div>
         <h3 class="tool-header">ODV</h3>
         <p class="tool-desc">Bekijk, doorzoek en bewerk de regels in omgevingsdocumenten. De ODV bestaat uit een regelview, een zoekfunctie en een editor waarmee je regels schrijft en exporteert naar GISKit.</p>
         <ul class="tool-features">
@@ -493,17 +502,18 @@
         <div class="partner-logo"><img src="img/WB-logo.png" alt="Witteveen+Bos" class="logo-wb"></div>
         <div class="partner-focus">Fysieke leefomgeving</div>
         <h3 class="partner-name">Witteveen+Bos</h3>
-        <p class="partner-desc">Brengt kennis van de fysieke leefomgeving en geo-informatie in.</p>
+        <p class="partner-desc">Brengt kennis van de fysieke leefomgeving in en ontwikkelde de HarmonisatieTool.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
+<!-- CONTACT -->
 <section class="cta-section" id="contact">
-  <h2 class="cta-title reveal">Klaar om te beginnen<span class="dot">?</span></h2>
+  <div class="eyebrow reveal">Contact</div>
+  <h2 class="cta-title reveal" style="--d:.05s">Klaar om te beginnen<span class="dot">?</span></h2>
   <p class="cta-desc reveal" style="--d:.1s">Neem contact op met één van de partners voor een vrijblijvend gesprek over jouw gemeente en hoe OWA je kan ondersteunen.</p>
-  <a href="mailto:joliene.klooster@witteveenbos.com" class="btn reveal" style="--d:.2s">Stuur een e-mail <svg class="icon"><use href="#i-arrow"/></svg></a>
+  <a href="mailto:joliene.klooster@witteveenbos.com" class="mail-link reveal" style="--d:.2s"><svg class="icon"><use href="#i-mail"/></svg>joliene.klooster@witteveenbos.com</a>
 </section>
 
 <!-- FOOTER -->
@@ -521,10 +531,6 @@
         <li><a href="#doelgroep">Voor wie</a></li>
         <li><a href="#partners">Partners</a></li>
       </ul>
-    </div>
-    <div class="footer-links">
-      <h4>Contact</h4>
-      <ul><li><a href="mailto:joliene.klooster@witteveenbos.com">joliene.klooster@witteveenbos.com</a></li></ul>
     </div>
   </div>
   <div class="footer-bottom">
