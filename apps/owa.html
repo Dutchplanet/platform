@@ -141,19 +141,19 @@
   .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
   .tool-card {
     background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
-    padding: 40px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column;
+    padding: 32px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column;
     transition: transform .25s, box-shadow .25s;
   }
   .tool-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
-  .tool-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+  .tool-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
   .tool-badge {
     display: inline-block; background: var(--purple-tint); color: var(--purple);
     font-size: 13px; font-weight: 700; padding: 5px 14px; border-radius: 100px; white-space: nowrap;
   }
-  .tool-header { font-size: 30px; margin-bottom: 14px; }
-  .tool-desc { font-size: 17px; color: var(--navy-soft); margin-bottom: 28px; }
-  .tool-features { list-style: none; display: grid; gap: 14px; margin-top: auto; padding-top: 28px; border-top: 1px solid var(--line); }
-  .tool-features li { display: flex; gap: 12px; font-size: 16px; line-height: 1.5; }
+  .tool-header { font-size: 24px; margin-bottom: 10px; }
+  .tool-desc { font-size: 16px; color: var(--navy-soft); margin-bottom: 24px; }
+  .tool-features { list-style: none; display: grid; gap: 12px; padding-top: 24px; border-top: 1px solid var(--line); }
+  .tool-features li { display: flex; gap: 12px; font-size: 15px; line-height: 1.5; }
   .tool-features .icon { width: 20px; height: 20px; color: var(--purple); margin-top: 2px; stroke-width: 2.25; }
 
   /* ── WERKWIJZE ── */
@@ -172,7 +172,9 @@
   .step-tool-tag {
     align-self: flex-start; margin-top: 18px; background: var(--navy); color: #fff;
     font-size: 13px; font-weight: 700; padding: 5px 14px; border-radius: 100px;
+    text-decoration: none; transition: background .2s;
   }
+  .step-tool-tag:hover { background: var(--purple); }
 
   /* ── VOOR WIE ── */
   .doelgroep-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
@@ -268,7 +270,17 @@
     .problem-grid { grid-template-columns: 1fr; }
     .problem-item { padding: 28px 4px; }
     .problem-item + .problem-item::after { left: 0; top: 0; height: 1px; width: 100%; }
-    .steps, .doelgroep-grid { grid-template-columns: 1fr; }
+    .steps, .doelgroep-grid { grid-template-columns: 1fr; gap: 14px; }
+    .step { padding: 22px; }
+    .step-top { margin-bottom: 14px; }
+    .step-num { font-size: 32px; }
+    .step .icon-box, .doelgroep-card .icon-box { width: 44px; height: 44px; margin-bottom: 0; }
+    .doelgroep-card { padding: 20px; display: grid; grid-template-columns: 44px 1fr; column-gap: 16px; align-items: start; }
+    .doelgroep-card .icon-box { grid-row: span 2; }
+    .doelgroep-title { font-size: 18px; margin-bottom: 2px; }
+    .section-head { margin-bottom: 36px; }
+    .partner-card { padding: 28px 24px; }
+    .partner-logo { height: 64px; margin-bottom: 16px; }
     .tool-card { padding: 28px; }
     .cta-section { padding: 64px 22px; }
     .contact-inner { grid-template-columns: 1fr; gap: 32px; }
@@ -305,8 +317,8 @@
   <nav class="navbar" aria-label="Hoofdmenu">
     <a class="nav-logo" href="#top" aria-label="OWA, naar boven"><img src="img/logo-owa.svg" alt="OWA"></a>
     <ul class="nav-links">
-      <li><a href="#tools">Toolbox</a></li>
       <li><a href="#werkwijze">Werkwijze</a></li>
+      <li><a href="#tools">Toolbox</a></li>
       <li><a href="#doelgroep">Voor wie</a></li>
       <li><a href="#partners">Partners</a></li>
     </ul>
@@ -319,7 +331,7 @@
   <div class="hero-inner">
     <div class="eyebrow">Omgevingswet Assistent</div>
     <h1 class="hero-title">Werken aan het digitale omgevingsplan<span class="dot">.</span></h1>
-    <p class="hero-subtitle">Binnen OWA slaan Rho Adviseurs, FLO Legal en Witteveen+Bos de handen ineen voor digitale versnelling in het omgevingswetdomein. Door onze krachten te bundelen ondersteunen we gemeenten met behulp van digitale diensten bij het maken, beheren en verbeteren van omgevingsdocumenten in het DSO, nu en na 2032.</p>
+    <p class="hero-subtitle">Binnen OWA slaan Rho Adviseurs, FLO Legal en Witteveen+Bos de handen ineen voor digitale versnelling in het omgevingswetdomein. Door onze krachten te bundelen ondersteunen we gemeenten met digitale diensten. Dat doen we bij het maken, beheren en verbeteren van omgevingsdocumenten in het DSO, nu en na 2032.</p>
     <div class="hero-actions">
       <a href="#contact" class="btn">Neem contact op <svg class="icon"><use href="#i-arrow"/></svg></a>
       <a href="#tools" class="btn btn-ghost">Bekijk de toolbox</a>
@@ -364,8 +376,55 @@
   </div>
 </section>
 
+<!-- WERKWIJZE -->
+<section class="section" id="werkwijze">
+  <div class="section-inner">
+    <div class="section-head reveal">
+      <div class="eyebrow">Werkwijze</div>
+      <h2 class="section-title">Van plan tot publicatie<span class="dot">.</span></h2>
+      <p class="lead">Het werken aan omgevingsdocumenten verloopt via een vaste keten van stappen. De partners van OWA ondersteunen gemeenten elk vanuit hun eigen expertise en met elkaars tooling uit de gedeelde toolbox, bij de eerste omzetting én bij elke wijziging daarna.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-top"><div class="icon-box"><svg class="icon"><use href="#i-search"/></svg></div><span class="step-num">01</span></div>
+        <h3 class="step-title">Analyseren</h3>
+        <p class="step-desc">Bestaande plannen worden doorgelicht op overlap en afwijkingen.</p>
+        <a class="step-tool-tag" href="#tools">HarmonisatieTool</a>
+      </div>
+      <div class="step reveal" style="--d:.08s">
+        <div class="step-top"><div class="icon-box"><svg class="icon"><use href="#i-compass"/></svg></div><span class="step-num">02</span></div>
+        <h3 class="step-title">Kiezen</h3>
+        <p class="step-desc">De professional maakt de harmonisatiekeuzes voor het omgevingsplan.</p>
+      </div>
+      <div class="step reveal" style="--d:.16s">
+        <div class="step-top"><div class="icon-box"><svg class="icon"><use href="#i-edit"/></svg></div><span class="step-num">03</span></div>
+        <h3 class="step-title">Regels opstellen</h3>
+        <p class="step-desc">Regels schrijven volgens de DSO-standaard, consistent en juridisch sluitend.</p>
+        <a class="step-tool-tag" href="#tools">ODV</a>
+      </div>
+      <div class="step reveal">
+        <div class="step-top"><div class="icon-box"><svg class="icon"><use href="#i-pin"/></svg></div><span class="step-num">04</span></div>
+        <h3 class="step-title">Locatie koppelen</h3>
+        <p class="step-desc">Regels krijgen een plek op de kaart, zodat ze raadpleegbaar zijn.</p>
+        <a class="step-tool-tag" href="#tools">ODV</a>
+      </div>
+      <div class="step reveal" style="--d:.08s">
+        <div class="step-top"><div class="icon-box"><svg class="icon"><use href="#i-shield"/></svg></div><span class="step-num">05</span></div>
+        <h3 class="step-title">Controleren</h3>
+        <p class="step-desc">Juridische en technische check voordat er iets wordt gepubliceerd.</p>
+        <a class="step-tool-tag" href="#tools">ODV</a>
+      </div>
+      <div class="step reveal" style="--d:.16s">
+        <div class="step-top"><div class="icon-box"><svg class="icon"><use href="#i-send"/></svg></div><span class="step-num">06</span></div>
+        <h3 class="step-title">Publiceren</h3>
+        <p class="step-desc">Het omgevingsdocument gaat naar het DSO, klaar voor raadpleging.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- TOOLS -->
-<section class="section" id="tools">
+<section class="section bg-light" id="tools">
   <div class="section-inner">
     <div class="section-head reveal">
       <div class="eyebrow">De toolbox</div>
@@ -399,53 +458,6 @@
         </ul>
       </article>
 
-    </div>
-  </div>
-</section>
-
-<!-- WERKWIJZE -->
-<section class="section bg-light" id="werkwijze">
-  <div class="section-inner">
-    <div class="section-head reveal">
-      <div class="eyebrow">Werkwijze</div>
-      <h2 class="section-title">Van plan tot publicatie<span class="dot">.</span></h2>
-      <p class="lead">Het werken aan omgevingsdocumenten verloopt via een vaste keten van stappen. De partners van OWA ondersteunen gemeenten elk vanuit hun eigen expertise en met elkaars tooling uit de gedeelde toolbox, bij de eerste omzetting én bij elke wijziging daarna.</p>
-    </div>
-    <div class="steps">
-      <div class="step reveal">
-        <div class="step-top"><div class="icon-box"><svg class="icon"><use href="#i-search"/></svg></div><span class="step-num">01</span></div>
-        <h3 class="step-title">Analyseren</h3>
-        <p class="step-desc">Bestaande plannen worden doorgelicht op overlap en afwijkingen.</p>
-        <span class="step-tool-tag">HarmonisatieTool</span>
-      </div>
-      <div class="step reveal" style="--d:.08s">
-        <div class="step-top"><div class="icon-box"><svg class="icon"><use href="#i-compass"/></svg></div><span class="step-num">02</span></div>
-        <h3 class="step-title">Kiezen</h3>
-        <p class="step-desc">De professional maakt de harmonisatiekeuzes voor het omgevingsplan.</p>
-      </div>
-      <div class="step reveal" style="--d:.16s">
-        <div class="step-top"><div class="icon-box"><svg class="icon"><use href="#i-edit"/></svg></div><span class="step-num">03</span></div>
-        <h3 class="step-title">Regels opstellen</h3>
-        <p class="step-desc">Regels schrijven volgens de DSO-standaard, consistent en juridisch sluitend.</p>
-        <span class="step-tool-tag">ODV</span>
-      </div>
-      <div class="step reveal">
-        <div class="step-top"><div class="icon-box"><svg class="icon"><use href="#i-pin"/></svg></div><span class="step-num">04</span></div>
-        <h3 class="step-title">Locatie koppelen</h3>
-        <p class="step-desc">Regels krijgen een plek op de kaart, zodat ze raadpleegbaar zijn.</p>
-        <span class="step-tool-tag">ODV</span>
-      </div>
-      <div class="step reveal" style="--d:.08s">
-        <div class="step-top"><div class="icon-box"><svg class="icon"><use href="#i-shield"/></svg></div><span class="step-num">05</span></div>
-        <h3 class="step-title">Controleren</h3>
-        <p class="step-desc">Juridische en technische check voordat er iets wordt gepubliceerd.</p>
-        <span class="step-tool-tag">ODV</span>
-      </div>
-      <div class="step reveal" style="--d:.16s">
-        <div class="step-top"><div class="icon-box"><svg class="icon"><use href="#i-send"/></svg></div><span class="step-num">06</span></div>
-        <h3 class="step-title">Publiceren</h3>
-        <p class="step-desc">Het omgevingsdocument gaat naar het DSO, klaar voor raadpleging.</p>
-      </div>
     </div>
   </div>
 </section>
@@ -539,8 +551,8 @@
     <div class="footer-links">
       <h4>Navigatie</h4>
       <ul>
-        <li><a href="#tools">Toolbox</a></li>
         <li><a href="#werkwijze">Werkwijze</a></li>
+        <li><a href="#tools">Toolbox</a></li>
         <li><a href="#doelgroep">Voor wie</a></li>
         <li><a href="#partners">Partners</a></li>
       </ul>
